@@ -9,6 +9,12 @@ class adSex extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
+    protected $table = 'adSex';
+
+    protected $primaryKey = 'sxID';
+
     protected $fillable = [
         'sxID',
         'sxIMPS_ID',

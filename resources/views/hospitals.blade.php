@@ -26,7 +26,6 @@
     </tbody>
 </table>
 
-<input type="text" id="myInput" placeholder="Enter your text" disabled>
 </div>
 
 <div class="container px-5 my-5">

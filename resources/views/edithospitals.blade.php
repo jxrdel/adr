@@ -16,25 +16,33 @@
         @method('PUT')
         
         <label for="title">Hospital Title</label>
-        <input size="40" type="text" id="hsTitle" value="{{$hospital->hsTitle}}">
+        <input size="40" type="text" name="hsTitle" value="{{$hospital->hsTitle}}">
         <br><br>
         <label for="title">Hospital Code</label>
-        <input type="text" id="hsCode" value="{{$hospital->hsCode}}">
+        <input type="text" name="hsCode" value="{{$hospital->hsCode}}">
         <br><br>
         <label for="title">Hospital Type</label>
 
+        
+        <select name="hsTypeID" >
+            
+            {{-- Stores Hospital ID in a variable to determine selected option in the dropdown --}}
+            @php
+                $selectedoption = $hospital->htID;
+            @endphp
 
-        <select name="hsTypeID" id="hsTypeID">
-            <option selected value="{{$hospital->htID}}" disabled>{{$hospital->htTitle}}</option>
             @foreach ($hTypes as $hType)
-            <option id="hsTypeID" value="{{ $hType->htID }}">{{ $hType->htTitle }}</option>
+            {{-- Changes selected option to the corresponding Hospital Type--}}
+            <option value="{{ $hType->htID }}" {{ $selectedoption == $hType->htID ? 'selected' : '' }}>{{ $hType->htTitle }}</option>
             @endforeach
         </select>
 
         @endforeach
+        
         <br>
         <br>
         <br>
+
         <button class="btn btn-primary btn-lg px-4 me-sm-3" type="submit">Save</button>
         <a class="btn btn-primary btn-lg px-4 me-sm-3" style="background-color: rgb(240, 58, 58);border-color:rgb(240, 58, 58)" href="{{ route('hospitals') }}">Cancel</a>
     </form>

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdHospitalsController;
+use App\Http\Controllers\AdPatientRecordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +15,9 @@ use App\Http\Controllers\AdHospitalsController;
 |
 */
 
+Route::get('/', function () {return view('welcome');})->name('/');
 Route::get('/hospitals', [AdHospitalsController::class, 'index'])->name('hospitals');
 Route::get('/edithospitals/{id}', [AdHospitalsController::class, 'edit'])->name('edithospitals');
 Route::put('/updatehospitals/{id}', [AdHospitalsController::class, 'update'])->name('updatehospitals');
-
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/adrecords', [AdPatientRecordController::class, 'index'])->name('adrecords');
+Route::get('/editadrecords/{id}', [AdPatientRecordController::class, 'edit'])->name('editadrecords');

@@ -33,13 +33,10 @@ class AdHospitalsController extends Controller
 
     public function update(Request $request, $id)
 {
-    $hospital = adHospitals::findOrFail($id);
-
-    dd($request->input('hsTitle'));
-    $hospital->update([
+    adHospitals::where('hsID', $id)->update([
         'hsTitle' => $request->input('hsTitle'),
-        'hsTypeID' => $request->input('hsTypeID'),
         'hsCode' => $request->input('hsCode'),
+        'hsTypeID' => $request->input('hsTypeID'),
     ]);
 
     return redirect()->route('hospitals')->with('success', 'Hospital updated successfully.');

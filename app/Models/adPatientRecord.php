@@ -9,6 +9,12 @@ class adPatientRecord extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
+    protected $table = 'adPatientRecord';
+
+    protected $primaryKey = 'adID';
+
     protected $fillable = [
         'adID',
         'adIMPS_BatchID',
