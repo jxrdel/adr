@@ -5,7 +5,7 @@
     <h1 class="fw-bolder">Admission & Discharge Records</h1>
 </div>
 <div class="container">
-<table id="myTable" class="table table-striped table-bordered">
+<table id="recordsTable" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Registraion Number</th>

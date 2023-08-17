@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class adMaritalStatus extends Model
+class adSerial extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
 
-    protected $table = 'adMaritalStatus';
+    protected $table = 'adSerial';
 
-    protected $primaryKey = 'msID';
+    protected $primaryKey = 'srID';
 
     protected $fillable = [
-        'msID',
-        'msIMPS_ID',
-        'msTitle',
+        'srID',
+        'srIMPS_ID',
+        'srTitle',
     ];
 }

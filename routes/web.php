@@ -21,3 +21,4 @@ Route::get('/edithospitals/{id}', [AdHospitalsController::class, 'edit'])->name(
 Route::put('/updatehospitals/{id}', [AdHospitalsController::class, 'update'])->name('updatehospitals');
 Route::get('/adrecords', [AdPatientRecordController::class, 'index'])->name('adrecords');
 Route::get('/editadrecords/{id}', [AdPatientRecordController::class, 'edit'])->name('editadrecords');
+Route::get('/updateadrecords/{id}', [AdPatientRecordController::class, 'edit'])->name('updateadrecords');

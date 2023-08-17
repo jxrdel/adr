@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\adDischargeStatus;
+use App\Models\adDischargeType;
+use App\Models\adEthnicity;
+use App\Models\adMaritalStatus;
 use App\Models\adPatientRecord;
+use App\Models\adResidenceZone;
 use App\Models\adSex;
+use App\Models\adSerial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -93,7 +99,103 @@ class AdPatientRecordController extends Controller
         }
 
         $sexes = adSex::all();
+        $serials = adSerial::all();
+        $rzones = adResidenceZone::all();
+        $mstatuses = adMaritalStatus::all();
+        $dStatuses = adDischargeStatus::all();
+        $dTypes = adDischargeType::all();
+        $ethnicities = adEthnicity::all();
 
-        return view('editadrecords', ['records' => $records], ['sexes' => $sexes]);
+        $combined = compact('sexes', 'serials', 'rzones', 'mstatuses', 'dStatuses', 'dTypes', 'ethnicities');
+
+        return view('editadrecords', ['records' => $records], $combined);
+    }
+
+    public function update(Request $request, $id){
+
+        adPatientRecord::where('adID', $id)->update([
+            'adID' => $request->input('adID'),
+            'adBatchID' => $request->input('adBatchID'),
+            'adRegistrationNo' => $request->input('adRegistrationNo'),
+            'adSerialID' => $request->input('adSerialID'),
+            'adMaritalStatusID' => $request->input('adMaritalStatusID'),
+            'adSexID' => $request->input('adSexID'),
+            'adEthnicityID' => $request->input('adEthnicityID'),
+            'adDateOfBirth' => $request->input('adDateOfBirth'),
+            'adDateOfAdmission' => $request->input('adDateOfAdmission'),
+            'adDateOfDischarge' => $request->input('adDateOfDischarge'),
+            'adDateOfBirthEstimated' => $request->input('adDateOfBirthEstimated'),
+            'adDateOfBirthUnknown' => $request->input('adDateOfBirthUnknown'),
+            'adAgeAdmission_Years' => $request->input('adAgeAdmission_Years'),
+            'adAgeAdmission_Months' => $request->input('adAgeAdmission_Months'),
+            'adAgeAdmission_Days' => $request->input('adAgeAdmission_Days'),
+            'adAgeDischarge_Years' => $request->input('adAgeDischarge_Years'),
+            'adAgeDischarge_Months' => $request->input('adAgeDischarge_Months'),
+            'adAgeDischarge_Days' => $request->input('adAgeDischarge_Days'),
+            'adAgeGroup' => $request->input('adAgeGroup'),
+            'adLengthOfStay' => $request->input('adLengthOfStay'),
+            'adDepartmentID' => $request->input('adDepartmentID'),
+            'adDiagnosis1_Block' => $request->input('adDiagnosis1_Block'),
+            'adDiagnosis1_BlockDetail' => $request->input('adDiagnosis1_BlockDetail'),
+            'adDiagnosis2_Block' => $request->input('adDiagnosis2_Block'),
+            'adDiagnosis2_BlockDetail' => $request->input('adDiagnosis2_BlockDetail'),
+            'adDiagnosis3_Block' => $request->input('adDiagnosis3_Block'),
+            'addiagnosis3_BlockDetail' => $request->input('addiagnosis3_BlockDetail'),
+            'adDiagnosis4_Block' => $request->input('adDiagnosis4_Block'),
+            'adDiagnosis4_BlockDetail' => $request->input('adDiagnosis4_BlockDetail'),
+            'adOperation1_Block' => $request->input('adOperation1_Block'),
+            'adOperation1_BlockDetail' => $request->input('adOperation1_BlockDetail'),
+            'adOperation2_Block' => $request->input('adOperation2_Block'),
+            'adOperation2_BlockDetail' => $request->input('adOperation2_BlockDetail'),
+            'adDischargeStatusID' => $request->input('adDischargeStatusID'),
+            'adDischargeTypeID' => $request->input('adDischargeTypeID'),
+            'adCauseOfDeath_Block' => $request->input('adCauseOfDeath_Block'),
+            'adCauseOfDeath_BlockDetail' => $request->input('adCauseOfDeath_BlockDetail'),
+            'adECode_Block' => $request->input('adECode_Block'),
+            'adECode_BlockDetail' => $request->input('adECode_BlockDetail'),
+            // 'adExceptionalCase' => $request->input('adExceptionalCase'),
+            // 'adExceptionalDesc' => $request->input('adExceptionalDesc'),
+            // 'adExceptionalError' => $request->input('adExceptionalError'),
+            // 'adHospitalID' => $request->input('adHospitalID'),
+            // 'adFirstName' => $request->input('adFirstName'),
+            // 'adMiddleName' => $request->input('adMiddleName'),
+            // 'adLastName' => $request->input('adLastName'),
+            // 'adBirthPlace' => $request->input('adBirthPlace'),
+            // 'adAddress_Street' => $request->input('adAddress_Street'),
+            // 'adAddress_TownID' => $request->input('adAddress_TownID'),
+            // 'adAddress_ZoneID' => $request->input('adAddress_ZoneID'),
+            // 'adReligionID' => $request->input('adReligionID'),
+            // 'adOccupation' => $request->input('adOccupation'),
+            // 'adNextOfKin_FullName' => $request->input('adNextOfKin_FullName'),
+            // 'adNextOfKin_Relationship' => $request->input('adNextOfKin_Relationship'),
+            // 'adNextOfKin_Address' => $request->input('adNextOfKin_Address'),
+            // 'adEmergencyNotify_FullName' => $request->input('adEmergencyNotify_FullName'),
+            // 'adEmergencyNotify_Address' => $request->input('adEmergencyNotify_Address'),
+            // 'adEmergencyNotify_Telephone' => $request->input('adEmergencyNotify_Telephone'),
+            // 'adFatherFullName' => $request->input('adFatherFullName'),
+            // 'adMotherFullName' => $request->input('adMotherFullName'),
+            // 'adTelephoneMessage' => $request->input('adTelephoneMessage'),
+            // 'adSpecialistMedicalOfficer' => $request->input('adSpecialistMedicalOfficer'),
+            // 'adHouseOfficer' => $request->input('adHouseOfficer'),
+            // 'adBlood_HB' => $request->input('adBlood_HB'),
+            // 'adBlood_Group_ABO' => $request->input('adBlood_Group_ABO'),
+            // 'adBlood_Group_Rh' => $request->input('adBlood_Group_Rh'),
+            // 'adBlood_Serology_VDRL' => $request->input('adBlood_Serology_VDRL'),
+            // 'adBlood_Serology_SCT' => $request->input('adBlood_Serology_SCT'),
+            // 'adWard' => $request->input('adWard'),
+            // 'adDiagnosis1_Description' => $request->input('adDiagnosis1_Description'),
+            // 'adDiagnosis2_Description' => $request->input('adDiagnosis2_Description'),
+            // 'adDiagnosis3_Description' => $request->input('adDiagnosis3_Description'),
+            // 'adDiagnosis4_Description' => $request->input('adDiagnosis4_Description'),
+            // 'adOperation1_Description' => $request->input('adOperation1_Description'),
+            // 'adOperation2_Description' => $request->input('adOperation2_Description'),
+            // 'adCreatedBy' => $request->input('adCreatedBy'),
+            // 'adCreatedDate' => $request->input('adCreatedDate'),
+            // 'adLastUpdatedBy' => $request->input('adLastUpdatedBy'),
+            // 'adLastUpdatedDate' => $request->input('adLastUpdatedDate'),
+            
+        ]);
+    
+        return redirect()->route('hospitals')->with('success', 'Hospital updated successfully.');
     }
 }

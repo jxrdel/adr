@@ -10,6 +10,37 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+ .clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.table-container {
+  float: left;
+  width: 40%; /* Adjust as needed */
+  padding: 20px;
+}
+
+.clearfix td,  .clearfix th {
+  padding: 12px; /* Adjust as needed */
+  border: 1px solid #ccc; /* Add cell borders */
+}
+#editTable{
+  display: flex;
+  justify-content: center; /* Horizontally center content */
+  align-items: center; /* Vertically center content */
+}
+.btnDiv{
+  display: flex;
+  justify-content: center; /* Horizontally center content */
+  align-items: center; /* Vertically center content */
+}
+
+#editTable td,  #editTable th {
+  padding: 20px; /* Adjust as needed */
+}
+
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;

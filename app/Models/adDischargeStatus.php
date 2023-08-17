@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class adDischargeStatus extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+
+    protected $table = 'adDischargeStatus';
+
+    protected $primaryKey = 'dsID';
 
     protected $fillable = [
         'dsID',

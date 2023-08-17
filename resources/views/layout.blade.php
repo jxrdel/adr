@@ -76,6 +76,12 @@
             $(document).ready(function() {
                 $('#myTable').DataTable();
             });
+
+            $(document).ready(function() {
+                $('#recordsTable').DataTable({
+                "pageLength": 50
+                });
+            });
         </script>
     </body>
 </html>
