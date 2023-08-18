@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\adDepartment;
 use App\Models\adDischargeStatus;
 use App\Models\adDischargeType;
 use App\Models\adEthnicity;
@@ -105,35 +106,27 @@ class AdPatientRecordController extends Controller
         $dStatuses = adDischargeStatus::all();
         $dTypes = adDischargeType::all();
         $ethnicities = adEthnicity::all();
+        $departments = adDepartment::all();
 
-        $combined = compact('sexes', 'serials', 'rzones', 'mstatuses', 'dStatuses', 'dTypes', 'ethnicities');
+        $combined = compact('sexes', 'serials', 'rzones', 'mstatuses', 'dStatuses', 'dTypes', 'ethnicities', 'departments');
 
         return view('editadrecords', ['records' => $records], $combined);
     }
 
     public function update(Request $request, $id){
 
+        // dd($request);
+
         adPatientRecord::where('adID', $id)->update([
-            'adID' => $request->input('adID'),
-            'adBatchID' => $request->input('adBatchID'),
             'adRegistrationNo' => $request->input('adRegistrationNo'),
             'adSerialID' => $request->input('adSerialID'),
+            'adAddress_ZoneID' => $request->input('adAddress_ZoneID'),
             'adMaritalStatusID' => $request->input('adMaritalStatusID'),
             'adSexID' => $request->input('adSexID'),
             'adEthnicityID' => $request->input('adEthnicityID'),
             'adDateOfBirth' => $request->input('adDateOfBirth'),
             'adDateOfAdmission' => $request->input('adDateOfAdmission'),
             'adDateOfDischarge' => $request->input('adDateOfDischarge'),
-            'adDateOfBirthEstimated' => $request->input('adDateOfBirthEstimated'),
-            'adDateOfBirthUnknown' => $request->input('adDateOfBirthUnknown'),
-            'adAgeAdmission_Years' => $request->input('adAgeAdmission_Years'),
-            'adAgeAdmission_Months' => $request->input('adAgeAdmission_Months'),
-            'adAgeAdmission_Days' => $request->input('adAgeAdmission_Days'),
-            'adAgeDischarge_Years' => $request->input('adAgeDischarge_Years'),
-            'adAgeDischarge_Months' => $request->input('adAgeDischarge_Months'),
-            'adAgeDischarge_Days' => $request->input('adAgeDischarge_Days'),
-            'adAgeGroup' => $request->input('adAgeGroup'),
-            'adLengthOfStay' => $request->input('adLengthOfStay'),
             'adDepartmentID' => $request->input('adDepartmentID'),
             'adDiagnosis1_Block' => $request->input('adDiagnosis1_Block'),
             'adDiagnosis1_BlockDetail' => $request->input('adDiagnosis1_BlockDetail'),
@@ -147,12 +140,24 @@ class AdPatientRecordController extends Controller
             'adOperation1_BlockDetail' => $request->input('adOperation1_BlockDetail'),
             'adOperation2_Block' => $request->input('adOperation2_Block'),
             'adOperation2_BlockDetail' => $request->input('adOperation2_BlockDetail'),
-            'adDischargeStatusID' => $request->input('adDischargeStatusID'),
-            'adDischargeTypeID' => $request->input('adDischargeTypeID'),
-            'adCauseOfDeath_Block' => $request->input('adCauseOfDeath_Block'),
-            'adCauseOfDeath_BlockDetail' => $request->input('adCauseOfDeath_BlockDetail'),
             'adECode_Block' => $request->input('adECode_Block'),
             'adECode_BlockDetail' => $request->input('adECode_BlockDetail'),
+            'adDischargeStatusID' => $request->input('adDischargeStatusID'),
+            'adDischargeTypeID' => $request->input('adDischargeTypeID'),
+
+
+            // 'adCauseOfDeath_Block' => $request->input('adCauseOfDeath_Block'),
+            // 'adCauseOfDeath_BlockDetail' => $request->input('adCauseOfDeath_BlockDetail'),
+            // 'adDateOfBirthEstimated' => $request->input('adDateOfBirthEstimated'),
+            // 'adDateOfBirthUnknown' => $request->input('adDateOfBirthUnknown'),
+            // 'adAgeAdmission_Years' => $request->input('adAgeAdmission_Years'),
+            // 'adAgeAdmission_Months' => $request->input('adAgeAdmission_Months'),
+            // 'adAgeAdmission_Days' => $request->input('adAgeAdmission_Days'),
+            // 'adAgeDischarge_Years' => $request->input('adAgeDischarge_Years'),
+            // 'adAgeDischarge_Months' => $request->input('adAgeDischarge_Months'),
+            // 'adAgeDischarge_Days' => $request->input('adAgeDischarge_Days'),
+            // 'adAgeGroup' => $request->input('adAgeGroup'),
+            // 'adLengthOfStay' => $request->input('adLengthOfStay'),
             // 'adExceptionalCase' => $request->input('adExceptionalCase'),
             // 'adExceptionalDesc' => $request->input('adExceptionalDesc'),
             // 'adExceptionalError' => $request->input('adExceptionalError'),
@@ -195,7 +200,8 @@ class AdPatientRecordController extends Controller
             // 'adLastUpdatedDate' => $request->input('adLastUpdatedDate'),
             
         ]);
+        
     
-        return redirect()->route('hospitals')->with('success', 'Hospital updated successfully.');
+        return redirect()->route('adrecords')->with('success', 'Hospital updated successfully.');
     }
 }

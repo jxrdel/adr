@@ -9,6 +9,12 @@ class adDepartment extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
+    protected $table = 'adDepartment';
+
+    protected $primaryKey = 'dpID';
+
     protected $fillable = [
         'dpID',
         'dpIMPS_ID',
