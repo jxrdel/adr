@@ -9,14 +9,14 @@
     @foreach ($records as $record)
     <div class="clearfix" >
         <div class="table-container" style="margin-left: 150px">
-            <form method="POST" action="{{ route('updateadrecords', ['id' => $record->adID]) }}">
+            <form method="POST" id="editadr" action="{{ route('updateadrecords', ['id' => $record->adID]) }}">
                 @csrf
                 @method('PUT')
                 
                 <table>
                     <tr>
                         <th><label for="title">Registration Number &nbsp;</label></th>
-                        <td><input pattern="[0-9]*" size="20" type="text" name="adRegistrationNo" value="{{$record->adRegistrationNo}}"></td>
+                        <td><input required pattern="[0-9]{6}" title="Please enter 6 digits only" size="20" type="text" name="adRegistrationNo" value="{{$record->adRegistrationNo}}"></td>
                     </tr>
                     <tr>
                         <th><label for="title">Admission Serial No.</label></th>
@@ -98,15 +98,19 @@
                     </tr>
                     <tr>
                         <th><label for="title">Date of Birth</label></th>
-                        <td><input type="date" name="adDateOfBirth" value="{{$record->formatted_adDateOfBirth}}"></td>
+                        <td><input type="date" name="adDateOfBirth" value="{{$record->formatted_adDateOfBirth}}">   &nbsp;&nbsp;No DOB?&nbsp;<input type="checkbox" id="nodobCheckbox" name="nodobCheckbox"></td>
+                    </tr>
+                    <tr class="hidden-row" style="display: none">
+                        <th><label for="title">Estimated Age</label></th>
+                        <td><input style="width: 80px" pattern="[0-9]*" max="130" title="Please enter digits only" id="estimatedDOB" type="number" name="estimatedDOB" size="2"> &nbsp;&nbsp;Unknown Age?&nbsp;<input id="unknownDOB" type="checkbox" name="adDateOfBirthUnknown"></td>
                     </tr>
                     <tr>
                         <th><label for="title">Date of Admission</label></th>
-                        <td><input type="date" name="adDateOfAdmission" value="{{$record->formatted_adDateOfAdmission}}"></td>
+                        <td><input id="adDateOfAdmission" type="date" name="adDateOfAdmission" value="{{$record->formatted_adDateOfAdmission}}"></td>
                     </tr>
                     <tr>
                         <th><label for="title">Date of Discharge</label></th>
-                        <td><input type="date" name="adDateOfDischarge" value="{{$record->formatted_adDateOfDischarge}}"></td>
+                        <td><input id="adDateOfDischarge" type="date" name="adDateOfDischarge" value="{{$record->formatted_adDateOfDischarge}}"></td>
                     </tr>
                     <tr>
                         <th><label for="title">Department &nbsp;</label></th>
@@ -179,7 +183,7 @@
                             </tr>
                             <tr>
                                 <th><label for="title">Discharge Type</label></th>
-                                <td><select name="adDischargeTypeID" >
+                                <td><select name="adDischargeTypeID" id="adDischargeTypeID">
                             
                                     {{-- Stores Hospital ID in a variable to determine selected option in the dropdown --}}
                                     @php
@@ -194,7 +198,7 @@
                             </tr>
                             <tr>
                                 <th><label for="title">Discharge Status</label></td>
-                                <td><select name="adDischargeStatusID" >
+                                <td><select id="adDischargeStatusID" name="adDischargeStatusID" >
                             
                                     {{-- Stores Hospital ID in a variable to determine selected option in the dropdown --}}
                                     @php
@@ -224,6 +228,46 @@
                 
             </form>
     
+            <script>
+                document.getElementById("editadr").addEventListener("submit", function(event) 
+                {
+                    event.preventDefault(); // Prevent the form from submitting by default
+                    
+                    // Get the values of the start date and end date fields
+                    const adDateOfAdmission = new Date(document.getElementById("adDateOfAdmission").value);
+                    const adDateOfDischarge = new Date(document.getElementById("adDateOfDischarge").value);
+                    const adDischargeTypeID = document.getElementById("adDischargeTypeID").value;
+                    const adDischargeStatusID = document.getElementById("adDischargeStatusID").value;
+                    const estimatedDOB = document.getElementById("estimatedDOB");
 
+                    if (document.getElementById('nodobCheckbox').checked && !document.getElementById('unknownDOB').checked && estimatedDOB.value === '') {
+                        // Prevent the form from submitting
+                        // event.preventDefault();
+
+                        // Display an alert
+                        alert('Please enter estimated age');
+                    }else if ((adDischargeTypeID == 6 && adDischargeStatusID < 5) || (adDischargeStatusID >= 5 && adDischargeTypeID < 6)){
+                        alert("Discharge Type does not match Discharge Status");
+                    }else if (adDateOfAdmission.getTime() < adDateOfDischarge.getTime()) {
+                    // If the start date is before the end date, submit the form
+                    this.submit();
+                    } else {
+                    // If the start date is not before the end date, show an error message
+                    alert("Date of discharge must be after date of admission");
+
+                    
+                }
+                
+                });
+
+                const checkbox = document.getElementById('nodobCheckbox');
+                const row = document.querySelector('.hidden-row');
+
+                // Add an event listener to the checkbox
+                checkbox.addEventListener('change', function() {
+                    // Toggle the visibility of the row based on the checkbox state
+                    row.style.display = this.checked ? 'table-row' : 'none';
+        });
+            </script>
 
 @endsection

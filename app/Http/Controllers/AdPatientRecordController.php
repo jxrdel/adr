@@ -114,8 +114,30 @@ class AdPatientRecordController extends Controller
     }
 
     public function update(Request $request, $id){
+        //Set time for last updated
+        $lastUpdated = Carbon::now();
+        $lastUpdated = $lastUpdated->format('Y-m-d H:i:s');
 
-        // dd($request);
+        //Set value for adDateOfBirthUnknown depending on if checkbox is selected
+        $adDateOfBirthUnknown = $request->has('adDateOfBirthUnknown') ? 1 : 0;
+
+        //Check if 'No Date of Birth' checkbox is selected
+        $noDOB = $request->has('nodobCheckbox') ? 1 : 0;
+
+        //Set estimated Date of Birth
+        if ($noDOB == '1' && $adDateOfBirthUnknown == '0'){
+
+                $years = $request->input('estimatedDOB');
+                $today = Carbon::now();
+                $estimatedDOB = $today->subYears($years);
+                $estimatedDOB = $estimatedDOB->format('Y-m-d');
+                $dobADR = $estimatedDOB;
+                $isEstimated = 1;
+
+        }else{
+            $dobADR = $request->input('adDateOfBirth'); //DOB is unchanged if there is no estimated DOB
+            $isEstimated = 0;
+        }
 
         adPatientRecord::where('adID', $id)->update([
             'adRegistrationNo' => $request->input('adRegistrationNo'),
@@ -124,7 +146,9 @@ class AdPatientRecordController extends Controller
             'adMaritalStatusID' => $request->input('adMaritalStatusID'),
             'adSexID' => $request->input('adSexID'),
             'adEthnicityID' => $request->input('adEthnicityID'),
-            'adDateOfBirth' => $request->input('adDateOfBirth'),
+            'adDateOfBirth' => $dobADR,
+            'adDateOfBirthEstimated' => $isEstimated,
+            'adDateOfBirthUnknown' => $adDateOfBirthUnknown,
             'adDateOfAdmission' => $request->input('adDateOfAdmission'),
             'adDateOfDischarge' => $request->input('adDateOfDischarge'),
             'adDepartmentID' => $request->input('adDepartmentID'),
@@ -144,6 +168,7 @@ class AdPatientRecordController extends Controller
             'adECode_BlockDetail' => $request->input('adECode_BlockDetail'),
             'adDischargeStatusID' => $request->input('adDischargeStatusID'),
             'adDischargeTypeID' => $request->input('adDischargeTypeID'),
+            'adLastUpdatedDate' => $lastUpdated,
 
 
             // 'adCauseOfDeath_Block' => $request->input('adCauseOfDeath_Block'),
