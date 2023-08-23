@@ -11,8 +11,8 @@
             <th>Registraion Number</th>
             <th>Batch</th>
             <th>Hospital</th>
-            <th>Create Date</th>
-            <th>Created by</th>
+            <th>Create By</th>
+            <th>Created Date</th>
             <th>Last Updated</th>
             <th>Last Updated By</th>
             <th>Edit</th>

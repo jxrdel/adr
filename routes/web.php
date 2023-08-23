@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdHospitalsController;
+use App\Http\Controllers\AdPatientRecordBatchController;
 use App\Http\Controllers\AdPatientRecordController;
+use App\Models\adPatientRecordBatch;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +24,11 @@ Route::put('/updatehospitals/{id}', [AdHospitalsController::class, 'update'])->n
 Route::get('/adrecords', [AdPatientRecordController::class, 'index'])->name('adrecords');
 Route::get('/editadrecords/{id}', [AdPatientRecordController::class, 'edit'])->name('editadrecords');
 Route::put('/updateadrecords/{id}', [AdPatientRecordController::class, 'update'])->name('updateadrecords');
+Route::get('/batches', [AdPatientRecordBatchController::class, 'index'])->name('batches');
+Route::get('/editbatch/{id}', [AdPatientRecordBatchController::class, 'edit'])->name('editbatch');
+Route::put('/updatebatch/{id}', [AdPatientRecordBatchController::class, 'update'])->name('updatebatch');
+Route::get('/createbatchrecord/{id}', [AdPatientRecordBatchController::class, 'createBatchRecord'])->name('createbatchrecord');
+Route::put('/insertBatchRecord/{id}', [AdPatientRecordBatchController::class, 'insertBatchRecord'])->name('insertBatchRecord');
+Route::get('/createbatch', [AdPatientRecordBatchController::class, 'createBatch'])->name('createbatch');
+Route::put('/insertbatch', [AdPatientRecordBatchController::class, 'insertBatch'])->name('insertbatch');
+
