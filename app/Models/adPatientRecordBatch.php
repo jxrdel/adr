@@ -19,7 +19,9 @@ class adPatientRecordBatch extends Model
         'btID',
         'btHospitalID',
         'btNumber',
-        'btCreated',
-        'btLastModified',
+        'btCreatedBy',
+        'btCreatedDate',
+        'btLastUpdatedBy',
+        'btLastUpdatedDate',
     ];
 }

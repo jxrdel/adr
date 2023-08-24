@@ -4,8 +4,8 @@
 <div class="text-center mb-5">
     <h1 class="fw-bolder">Batch Records</h1>
 </div>
-<div class="container">
-<table id="recordsTable" class="table table-striped table-bordered">
+<div class="container px 6 my 6">
+<table id="recordsTable" class="table table-striped table-bordered hover" width="100%">
     <thead>
         <tr>
             <th>Batch #</th>
@@ -33,7 +33,7 @@
             <td>{{ $batch->btLastUpdatedBy }}</td>
             <td>{{ $batch->batch_count }}</td>
             <td><a style="display:flex; justify-content: center; align-items: center;" class="fs-5 px-2 link-dark" href="{{ route('editbatch', ['id' => $batch->btID]) }}"><i class="bi bi-pencil-square"></i></a></td>
-            <td><a style="display:flex; justify-content: center; align-items: center;" class="fs-5 px-2 link-dark" href="#"><i class="bi bi-list-check"></i></a></td>
+            <td><a style="display:flex; justify-content: center; align-items: center;" class="fs-5 px-2 link-dark" href="{{ route('viewbatchrecords', ['id' => $batch->btID]) }}"><i class="bi bi-list-check"></i></a></td>
             <td><a style="display:flex; justify-content: center; align-items: center;" class="fs-5 px-2 link-dark" href="{{ route('createbatchrecord', ['id' => $batch->btID]) }}"><i class="bi bi-file-earmark-plus"></i></a></td>
         </tr>
         @endforeach

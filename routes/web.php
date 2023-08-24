@@ -27,6 +27,7 @@ Route::put('/updateadrecords/{id}', [AdPatientRecordController::class, 'update']
 Route::get('/batches', [AdPatientRecordBatchController::class, 'index'])->name('batches');
 Route::get('/editbatch/{id}', [AdPatientRecordBatchController::class, 'edit'])->name('editbatch');
 Route::put('/updatebatch/{id}', [AdPatientRecordBatchController::class, 'update'])->name('updatebatch');
+Route::get('/viewbatchrecords/{id}', [AdPatientRecordBatchController::class, 'viewBatchRecords'])->name('viewbatchrecords');
 Route::get('/createbatchrecord/{id}', [AdPatientRecordBatchController::class, 'createBatchRecord'])->name('createbatchrecord');
 Route::put('/insertBatchRecord/{id}', [AdPatientRecordBatchController::class, 'insertBatchRecord'])->name('insertBatchRecord');
 Route::get('/createbatch', [AdPatientRecordBatchController::class, 'createBatch'])->name('createbatch');

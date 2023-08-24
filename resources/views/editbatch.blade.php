@@ -8,6 +8,11 @@
 
 <div class="text-center mb-5">
     <h1 class="fw-bolder">Edit Batch</h1>
+
+    @if($errors->has('btNumber'))
+        <span class="text-danger">Batch number already exists. Please enter unique Batch Number</span>
+    @endif
+    
 </div>
 <div class="container px-5 my-5">
     @foreach ($batches as $batch)

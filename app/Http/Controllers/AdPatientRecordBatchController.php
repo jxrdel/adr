@@ -52,6 +52,18 @@ class AdPatientRecordBatchController extends Controller
 
     public function update(Request $request, $id)
         {
+            //If a change is made to the batch record, validation is done to ensure new batch number is unique
+            $previous = adPatientRecordBatch::find($id);
+            $previousbtNumber = $previous->btNumber;
+            $newbtNumber = $request->input('btNumber');
+
+            if ($previousbtNumber != $newbtNumber){
+                $request->validate([
+                    'btNumber' => 'unique:adPatientRecordBatch,btNumber',
+                ]);
+            }
+            
+
             adPatientRecordBatch::where('btID', $id)->update([
                 'btNumber' => $request->input('btNumber'),
                 'btHospitalID' => $request->input('btHospitalID'),
@@ -79,7 +91,7 @@ class AdPatientRecordBatchController extends Controller
         }
 
     public function insertBatchRecord(Request $request, $batchid){
-
+        $user = 'MOH\jardel.regis';
         // dd($request);
         //Set time for last updated
         $lastUpdated = Carbon::now();
@@ -109,9 +121,7 @@ class AdPatientRecordBatchController extends Controller
             $isEstimated = 0;
         }
 
-        $request->validate([
-            'adRegistrationNo' => 'unique:adPatientRecord,adRegistrationNo',
-        ]);
+        
 
         adPatientRecord::create([
             'adRegistrationNo' => $request->input('adRegistrationNo'),
@@ -146,16 +156,18 @@ class AdPatientRecordBatchController extends Controller
             'adLastUpdatedDate' => $lastUpdated,
             'adExceptionalCase' => $adExceptionalCase,
             'adExceptionalDesc' => $request->input('adExceptionalDesc'),
+            'adCreatedBy' => $user,
+            'adLastUpdatedBy' => $user,
         ]);
         
     
-        return redirect()->route('adrecords')->with('success', 'Hospital updated successfully.');
+        return redirect()->route('batches')->with('success', 'Hospital updated successfully.');
     }
 
     public function insertBatch(Request $request){
+        $user = 'MOH\jardel.regis';
         $today = Carbon::now();
         $today = $today->format('Y-m-d H:i:s');
-        dd($today);
 
         $request->validate([
             'btNumber' => 'unique:adPatientRecordBatch,btNumber',
@@ -165,7 +177,9 @@ class AdPatientRecordBatchController extends Controller
             'btHospitalID' => $request->input('btHospitalID'),
             'btNumber' => $request->input('btNumber'),
             'btCreatedDate' => $today,
+            'btCreatedBy' => $user,
             'btLastUpdatedDate' => $today,
+            'btLastUpdatedBy' => $user,
         ]);
 
         return redirect()->route('batches')->with('success', 'Hospital updated successfully.');
@@ -175,5 +189,19 @@ class AdPatientRecordBatchController extends Controller
         $hospitals = adHospitals::all();
 
         return view('createbatch', ['hospitals' => $hospitals]);
+    }
+
+    public function viewBatchRecords($batchid){
+        $records = adPatientRecord::select('adPatientRecord.*', 'adPatientRecordBatch.btNumber as btNumber', 'adHospitals.hsTitle as hsTitle')
+        ->join('adPatientRecordBatch', 'adPatientRecord.adBatchID', '=', 'adPatientRecordBatch.btID')
+        ->join('adHospitals', 'adPatientRecordBatch.btHospitalID', '=', 'adHospitals.hsID')
+        ->where('adPatientRecord.adBatchID',$batchid)
+        ->get();
+
+
+
+        // $records = adPatientRecord::where('adBatchID', $batchid)->get();
+
+        return view('viewbatchrecords', ['records' => $records]);
     }
 }

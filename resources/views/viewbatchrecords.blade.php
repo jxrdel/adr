@@ -1,11 +1,25 @@
 @extends('layout')
 
 @section('main')
+
+@php
+    $batchNo = $records->last()->btNumber;
+
+@endphp
 <div class="text-center mb-5">
-    <h1 class="fw-bolder">Admission & Discharge Records</h1>
+    
+    <h1 class="fw-bolder"> Admission & Discharge Records</h1>
+    <br>
+    <h1 class="fw-bolder" style="text-decoration: underline">{{$batchNo}}</h1>
 </div>
+
 <div class="container">
-<table id="adrecordsTable" class="table table-striped table-bordered hover">
+    <a class="btn btn-primary btn-lg px-4 me-sm-3"  href="{{ route('batches') }}"> <i class="bi bi-arrow-left"></i> Back</a>
+
+    <br>
+    <br>
+    
+<table id="adrecordsTable" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Registraion Number</th>

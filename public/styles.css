@@ -10,6 +10,18 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+ .datatable-container{
+  border: 2px solid black;
+ }
+ .dataTables_filter{
+  padding-bottom: 20px;
+ }
+
+/* Apply padding to the table */
+#datatable {
+    padding: 10px; /* Adjust as needed */
+}
+
  .clearfix:after {
   content: "";
   display: table;

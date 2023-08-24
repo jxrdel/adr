@@ -7,6 +7,7 @@
         <meta name="author" content="" />
         <title>Admission and Discharge Record View</title>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+        {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/dt-1.10.18/sl-1.2.6/datatables.min.css"/> --}}
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -26,7 +27,15 @@
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="about.html">Reports</a></li>
-                            <li class="nav-item"><a class="nav-link" href="contact.html">Data Entry</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Data Entry</a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+                                    <li><a class="dropdown-item" href="{{ route('adrecords') }}">View AD Records</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('hospitals') }}">View Hospitals</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('batches') }}">View Batches</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('createbatch') }}">Create Batch</a></li>
+                                </ul>
+                            </li>
                             <li class="nav-item"><a class="nav-link" href="contact.html">Documentation</a></li>
                             <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
                             <li class="nav-item"><a class="nav-link" href="pricing.html">Help</a></li>
@@ -82,6 +91,17 @@
                 "pageLength": 50
                 });
             });
+
+            $(document).ready(function() {
+                $('#adrecordsTable').DataTable({
+                "pageLength": 50,
+                order: [[5, 'desc']]
+                });
+
+                
+            });
+
+
         </script>
     </body>
 </html>
