@@ -1,3 +1,8 @@
+@php
+$userSession = auth()->user();
+$fullname = $userSession->fullname;
+$username = $userSession->username;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -40,10 +45,20 @@
                             <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
                             <li class="nav-item"><a class="nav-link" href="pricing.html">Help</a></li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                    <li><a class="dropdown-item" href="blog-home.html">Settings</a></li>
-                                    <li><a class="dropdown-item" href="blog-post.html">Log Out</a></li>
+                                    <li>&nbsp;{{$fullname}}</li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    @if(Auth::check())
+                                        <li class="dropdown-item">
+                                            <a href="{{ route('logout') }}" class="dropdown-item"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                {{ __('Logout') }}
+                                            </a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                @csrf
+                                            </form>
+                                        </li>
+                                    @endif
                                 </ul>
                             </li>
                         </ul>
@@ -63,7 +78,7 @@
         <footer class="bg-dark py-4 mt-auto">
             <div class="container px-5">
                 <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; Your Website 2023</div></div>
+                    <div class="col-auto"><div class="small m-0 text-white">Logged in as MOH/{{$username}}</div></div>
                     <div class="col-auto">
                         <a class="link-light small" href="#!">Privacy</a>
                         <span class="text-white mx-1">&middot;</span>

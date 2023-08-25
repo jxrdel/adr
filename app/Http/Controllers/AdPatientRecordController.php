@@ -113,7 +113,21 @@ class AdPatientRecordController extends Controller
         return view('editadrecords', ['records' => $records], $combined);
     }
 
+    
+
     public function update(Request $request, $id){
+
+        //If a change is made to the batch record, validation is done to ensure new batch number is unique
+        $previous = adPatientRecord::find($id);
+        $previousRegNo = $previous->adRegistrationNo;
+        $newRegNo = $request->input('adRegistrationNo');
+
+        if ($previousRegNo != $newRegNo){
+            $request->validate([
+                'adRegistrationNo' => 'unique:adPatientRecord,adRegistrationNo',
+            ]);
+        }
+
         //Set time for last updated
         $lastUpdated = Carbon::now();
         $lastUpdated = $lastUpdated->format('Y-m-d H:i:s');
@@ -169,6 +183,7 @@ class AdPatientRecordController extends Controller
             'adDischargeStatusID' => $request->input('adDischargeStatusID'),
             'adDischargeTypeID' => $request->input('adDischargeTypeID'),
             'adLastUpdatedDate' => $lastUpdated,
+            'adLastUpdatedBy' => $request->input('username'),
 
 
             // 'adCauseOfDeath_Block' => $request->input('adCauseOfDeath_Block'),

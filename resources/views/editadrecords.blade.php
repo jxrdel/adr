@@ -4,6 +4,10 @@
 
 <div class="text-center mb-5">
     <h1 class="fw-bolder">Edit Record</h1>
+
+    @if($errors->has('adRegistrationNo'))
+        <span class="text-danger">Registration number already exists. Please enter unique Registration Number</span>
+    @endif
 </div>
 <div class="container" >
     @foreach ($records as $record)
@@ -133,6 +137,10 @@
                     
                     <div class="table-container">
                         <table>
+                            <tr style="display: none">
+                                <th><input size="6" type="text" name="username" value="MOH\{{auth()->user()->username}}"></th>
+                                
+                            </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 1 &nbsp;</label></th>
                                 <td><input size="6" type="text" name="adDiagnosis1_Block" value="{{$record->adDiagnosis1_Block}}">

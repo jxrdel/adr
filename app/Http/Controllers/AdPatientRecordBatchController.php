@@ -52,6 +52,10 @@ class AdPatientRecordBatchController extends Controller
 
     public function update(Request $request, $id)
         {
+
+            $lastUpdated = Carbon::now();
+            $lastUpdated = $lastUpdated->format('Y-m-d H:i:s');
+
             //If a change is made to the batch record, validation is done to ensure new batch number is unique
             $previous = adPatientRecordBatch::find($id);
             $previousbtNumber = $previous->btNumber;
@@ -67,9 +71,11 @@ class AdPatientRecordBatchController extends Controller
             adPatientRecordBatch::where('btID', $id)->update([
                 'btNumber' => $request->input('btNumber'),
                 'btHospitalID' => $request->input('btHospitalID'),
+                'btLastUpdatedBy' => $request->input('username'),
+                'btLastUpdatedDate' => $lastUpdated,
             ]);
 
-            return redirect()->route('batches')->with('success', 'Hospital updated successfully.');
+            return redirect()->route('batches')->with('success', 'Batch updated successfully.');
         }
 
         public function createBatchRecord($batchid){
