@@ -24,7 +24,7 @@ class AdPatientRecordBatchController extends Controller
 {
     public function index(){
 
-
+        //Returns batch information along with a count of the records for each batch
         $batches = DB::table('adPatientRecordBatch')
         ->leftJoin('adPatientRecord', 'adPatientRecordBatch.btID', '=', 'adPatientRecord.adBatchID')
         ->join('adHospitals', 'adPatientRecordBatch.btHospitalID', '=', 'adHospitals.hsID')
@@ -33,18 +33,18 @@ class AdPatientRecordBatchController extends Controller
         'adPatientRecordBatch.btCreatedDate', 'adPatientRecordBatch.btLastUpdatedBy', 'adPatientRecordBatch.btLastUpdatedDate', 'adHospitals.hsTitle', 'adHospitals.hsCode')
         ->get();
 
-    // $products now contains a list of products with their type and the count of orders for each product
 
-    // You can return $products or use it as needed
     return view('batches', ['batches' => $batches]);
     }
 
     public function edit($id){
+        //Retrieves batch info for batch
         $batches = adPatientRecordBatch::select('adPatientRecordBatch.*', 'adHospitals.hsTitle as hsTitle', 'adHospitals.hsIMPS_ID as hsIMPS_ID')
         ->join('adHospitals', 'adPatientRecordBatch.btHospitalID', '=', 'adHospitals.hsID')
         ->where('adPatientRecordBatch.btID',$id)
         ->get();
 
+        //Retrieves hospital info to be able to select hospitals from drop-down
         $hospitals = adHospitals::all();
 
         return view('editbatch', ['batches' => $batches], ['hospitals' => $hospitals]);
@@ -52,7 +52,6 @@ class AdPatientRecordBatchController extends Controller
 
     public function update(Request $request, $id)
         {
-
             $lastUpdated = Carbon::now();
             $lastUpdated = $lastUpdated->format('Y-m-d H:i:s');
 
@@ -97,8 +96,8 @@ class AdPatientRecordBatchController extends Controller
         }
 
     public function insertBatchRecord(Request $request, $batchid){
-        $user = 'MOH\jardel.regis';
-        // dd($request);
+        $user = $request->input('username');
+        
         //Set time for last updated
         $lastUpdated = Carbon::now();
         $lastUpdated = $lastUpdated->format('Y-m-d H:i:s');
@@ -109,7 +108,7 @@ class AdPatientRecordBatchController extends Controller
         //Check if 'No Date of Birth' checkbox is selected
         $noDOB = $request->has('nodobCheckbox') ? 1 : 0;
 
-        //Set value for adDateOfBirthUnknown depending on if checkbox is selected
+        //Set value for adExceptionalCase depending on if checkbox is selected
         $adExceptionalCase = $request->has('adExceptionalCase') ? 1 : 0;
 
         //Set estimated Date of Birth
@@ -127,6 +126,10 @@ class AdPatientRecordBatchController extends Controller
             $isEstimated = 0;
         }
 
+        // Validation of Registration #
+        $request->validate([
+            'adRegistrationNo' => 'unique:adPatientRecord,adRegistrationNo',
+        ]);
         
 
         adPatientRecord::create([
@@ -167,11 +170,12 @@ class AdPatientRecordBatchController extends Controller
         ]);
         
     
-        return redirect()->route('batches')->with('success', 'Hospital updated successfully.');
+        return redirect()->route('batches')->with('success', 'Batch entered successfully.');
     }
 
     public function insertBatch(Request $request){
-        $user = 'MOH\jardel.regis';
+        $user = $request->input('username');
+        
         $today = Carbon::now();
         $today = $today->format('Y-m-d H:i:s');
 
@@ -188,7 +192,7 @@ class AdPatientRecordBatchController extends Controller
             'btLastUpdatedBy' => $user,
         ]);
 
-        return redirect()->route('batches')->with('success', 'Hospital updated successfully.');
+        return redirect()->route('batches')->with('success', 'Batch entered successfully.');
     }
 
     public function createBatch(){
@@ -203,11 +207,7 @@ class AdPatientRecordBatchController extends Controller
         ->join('adHospitals', 'adPatientRecordBatch.btHospitalID', '=', 'adHospitals.hsID')
         ->where('adPatientRecord.adBatchID',$batchid)
         ->get();
-
-
-
-        // $records = adPatientRecord::where('adBatchID', $batchid)->get();
-
+        
         return view('viewbatchrecords', ['records' => $records]);
     }
 }

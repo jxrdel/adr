@@ -19,6 +19,8 @@
                 
                 <table>
                     <tr>
+                        {{-- Hidden row for user name --}}
+                        <td style="display: none"><input size="6" type="text" name="username" value="MOH\{{auth()->user()->username}}"></td>
                         <th><label for="title">Registration Number &nbsp;</label></th>
                         <td><input required pattern="[0-9]{6}" title="Please enter 6 digits only" size="20" type="text" name="adRegistrationNo"></td>
                     </tr>

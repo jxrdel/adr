@@ -5,14 +5,18 @@
 <div class="text-center mb-5">
     <h1 class="fw-bolder">Edit Record</h1>
 
+    {{-- Displays eroor if Registration Number entered already exists --}}
     @if($errors->has('adRegistrationNo'))
         <span class="text-danger">Registration number already exists. Please enter unique Registration Number</span>
     @endif
 </div>
+
 <div class="container" >
+
     @foreach ($records as $record)
     <div class="clearfix" >
         <div class="table-container" style="margin-left: 150px">
+            
             <form method="POST" id="editadr" action="{{ route('updateadrecords', ['id' => $record->adID]) }}">
                 @csrf
                 @method('PUT')
@@ -20,8 +24,10 @@
                 <table>
                     <tr>
                         <th><label for="title">Registration Number &nbsp;</label></th>
+                        {{-- Input field only allows an input of 6 digits --}}
                         <td><input required pattern="[0-9]{6}" title="Please enter 6 digits only" size="20" type="text" name="adRegistrationNo" value="{{$record->adRegistrationNo}}"></td>
                     </tr>
+
                     <tr>
                         <th><label for="title">Admission Serial No.</label></th>
                         <td><select name="adSerialID" >
@@ -38,6 +44,7 @@
                             </select>
                         </td>
                     </tr>
+
                     <tr>
                         <th><label for="title">Residential Zone</label></th>
                         <td><select name="adAddress_ZoneID" >
@@ -54,33 +61,35 @@
                             </select>
                         </td>
                     </tr>
+
                     <tr>
                         <th><label for="title">Marital Status</label></th>
                         <td><select name="adMaritalStatusID" >
                     
-                            {{-- Stores Hospital ID in a variable to determine selected option in the dropdown --}}
+                            {{-- Stores Marital Status in a variable to determine selected option in the dropdown --}}
                             @php
                                 $selectedMS = $record->msID;
                             @endphp
                 
                             @foreach ($mstatuses as $mstatus)
-                            {{-- Changes selected option to the corresponding Hospital Type--}}
+                            {{-- Changes selected option to the corresponding Marital Status--}}
                             <option value="{{ $mstatus->msID }}" {{ $selectedMS == $mstatus->msID ? 'selected' : '' }}>{{ $mstatus->msID }}: {{ $mstatus->msTitle }}</option>
                             @endforeach
                             </select>
                             </td>
                     </tr>
+
                     <tr>
                         <th><label for="title">Sex</label></th>
                         <td><select name="adSexID" >
                     
-                            {{-- Stores Hospital ID in a variable to determine selected option in the dropdown --}}
+                            {{-- Stores Sex in a variable to determine selected option in the dropdown --}}
                             @php
                                 $selectedsex = $record->sxIMPS_ID;
                             @endphp
                 
                             @foreach ($sexes as $sex)
-                            {{-- Changes selected option to the corresponding Hospital Type--}}
+                            {{-- Changes selected option to the corresponding Sex--}}
                             <option value="{{ $sex->sxIMPS_ID }}" {{ $selectedsex == $sex->sxIMPS_ID ? 'selected' : '' }}>{{ $sex->sxIMPS_ID }}: {{ $sex->sxTitle }}</option>
                             @endforeach
                         </select></td>
@@ -89,44 +98,49 @@
                         <th><label for="title">Ethnicity</label></th>
                         <td><select name="adEthnicityID" >
                     
-                            {{-- Stores Hospital ID in a variable to determine selected option in the dropdown --}}
+                            {{-- Stores Ethnicity in a variable to determine selected option in the dropdown --}}
                             @php
                                 $selectedETH = $record->adEthnicityID;
                             @endphp
                 
                             @foreach ($ethnicities as $ethnicity)
-                            {{-- Changes selected option to the corresponding Hospital Type--}}
+                            {{-- Changes selected option to the corresponding Ethnicity--}}
                             <option value="{{ $ethnicity->etID }}" {{ $selectedETH == $ethnicity->etID ? 'selected' : '' }}>{{ $ethnicity->etIMPS_ID }}: {{ $ethnicity->etTitle }}</option>
                             @endforeach
                         </select></td>
                     </tr>
+
                     <tr>
                         <th><label for="title">Date of Birth</label></th>
                         <td><input type="date" name="adDateOfBirth" value="{{$record->formatted_adDateOfBirth}}">   &nbsp;&nbsp;No DOB?&nbsp;<input type="checkbox" id="nodobCheckbox" name="nodobCheckbox"></td>
                     </tr>
+
                     <tr class="hidden-row" style="display: none">
                         <th><label for="title">Estimated Age</label></th>
                         <td><input style="width: 80px" pattern="[0-9]*" max="130" title="Please enter digits only" id="estimatedDOB" type="number" name="estimatedDOB" size="2"> &nbsp;&nbsp;Unknown Age?&nbsp;<input id="unknownDOB" type="checkbox" name="adDateOfBirthUnknown"></td>
                     </tr>
+
                     <tr>
                         <th><label for="title">Date of Admission</label></th>
                         <td><input id="adDateOfAdmission" type="date" name="adDateOfAdmission" value="{{$record->formatted_adDateOfAdmission}}"></td>
                     </tr>
+
                     <tr>
                         <th><label for="title">Date of Discharge</label></th>
                         <td><input id="adDateOfDischarge" type="date" name="adDateOfDischarge" value="{{$record->formatted_adDateOfDischarge}}"></td>
                     </tr>
+
                     <tr>
                         <th><label for="title">Department &nbsp;</label></th>
                         <td><select name="adDepartmentID" >
                     
-                            {{-- Stores Hospital ID in a variable to determine selected option in the dropdown --}}
+                            {{-- Stores Department ID in a variable to determine selected option in the dropdown --}}
                             @php
                                 $selectedDPT = $record->adDepartmentID;
                             @endphp
                 
                             @foreach ($departments as $department)
-                            {{-- Changes selected option to the corresponding Hospital Type--}}
+                            {{-- Changes selected option to the corresponding Department--}}
                             <option value="{{ $department->dpID }}" {{ $selectedDPT == $department->dpID ? 'selected' : '' }}>{{ $department->dpIMPS_ID }}: {{ $department->dpTitle }}</option>
                             @endforeach
                         </select></td>
@@ -241,7 +255,7 @@
                 {
                     event.preventDefault(); // Prevent the form from submitting by default
                     
-                    // Get the values of the start date and end date fields
+                    // Get the values of the fields
                     const adDateOfAdmission = new Date(document.getElementById("adDateOfAdmission").value);
                     const adDateOfDischarge = new Date(document.getElementById("adDateOfDischarge").value);
                     const adDischargeTypeID = document.getElementById("adDischargeTypeID").value;

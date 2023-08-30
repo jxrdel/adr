@@ -20,8 +20,10 @@
         @method('PUT')
         <table style="align-content: center" id="editTable">
             <tr>
+                {{-- Hidden row for user name --}}
+                <td style="display: none"><input size="6" type="text" name="username" value="MOH\{{auth()->user()->username}}"></td>
                 <th><label for="title">Batch #</label></th>
-                <td><input pattern="[A-Za-z]{3}\d{5}" title="Please enter 3 digit hospital + 2 digit year + 3 digit sequential number" size="20" type="text" name="btNumber" ></td>
+                <td><input required pattern="[A-Za-z]{3}\d{5}" title="Please enter 3 digit hospital + 2 digit year + 3 digit sequential number" size="20" type="text" name="btNumber" ></td>
             </tr>
             <tr>
                 <th><label for="title">Hospital: </label></th>

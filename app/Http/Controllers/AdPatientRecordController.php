@@ -90,13 +90,13 @@ class AdPatientRecordController extends Controller
         //Format Dates
         foreach ($records as $record) {
             $formattedDOB = Carbon::parse($record->adDateOfBirth)->format('Y-m-d');
-            $record->formatted_adDateOfBirth = $formattedDOB; // Add a new attribute to the model
+            $record->formatted_adDateOfBirth = $formattedDOB; 
 
             $formattedDOA = Carbon::parse($record->adDateOfAdmission)->format('Y-m-d');
-            $record->formatted_adDateOfAdmission = $formattedDOA; // Add a new attribute to the model
+            $record->formatted_adDateOfAdmission = $formattedDOA; 
 
             $formattedDOD = Carbon::parse($record->adDateOfDischarge)->format('Y-m-d');
-            $record->formatted_adDateOfDischarge = $formattedDOD; // Add a new attribute to the model
+            $record->formatted_adDateOfDischarge = $formattedDOD;
         }
 
         $sexes = adSex::all();
@@ -108,6 +108,7 @@ class AdPatientRecordController extends Controller
         $ethnicities = adEthnicity::all();
         $departments = adDepartment::all();
 
+        //Combine all the arrays to send it to editrecords view
         $combined = compact('sexes', 'serials', 'rzones', 'mstatuses', 'dStatuses', 'dTypes', 'ethnicities', 'departments');
 
         return view('editadrecords', ['records' => $records], $combined);

@@ -30,12 +30,11 @@ $username = $userSession->username;
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="about.html">Reports</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Data Entry</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                    <li><a class="dropdown-item" href="{{ route('adrecords') }}">View AD Records</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('adrecords') }}">View Records</a></li>
                                     <li><a class="dropdown-item" href="{{ route('hospitals') }}">View Hospitals</a></li>
                                     <li><a class="dropdown-item" href="{{ route('batches') }}">View Batches</a></li>
                                     <li><a class="dropdown-item" href="{{ route('createbatch') }}">Create Batch</a></li>
@@ -65,7 +64,6 @@ $username = $userSession->username;
                     </div>
                 </div>
             </nav>
-            <!-- Pricing section-->
             
             <section class="bg-light py-5">
                 @yield('main')
@@ -97,6 +95,7 @@ $username = $userSession->username;
         <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script>
+            // DataTables configuration
             $(document).ready(function() {
                 $('#myTable').DataTable();
             });
