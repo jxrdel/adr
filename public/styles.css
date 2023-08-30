@@ -38,6 +38,12 @@
   padding: 12px; /* Adjust as needed */
   border: 1px solid #ccc; /* Add cell borders */
 }
+.batchContainer table{
+  padding: 50px;
+}
+.batchContainer td,  .batchContainer th {
+  border: 1px solid #ccc; /* Add cell borders */
+}
 #editTable{
   display: flex;
   justify-content: center; /* Horizontally center content */
@@ -50,6 +56,11 @@
 }
 
 #editTable td,  #editTable th {
+  padding: 20px; /* Adjust as needed */
+}
+
+
+#batchTable td,  #batchTable th {
   padding: 20px; /* Adjust as needed */
 }
 

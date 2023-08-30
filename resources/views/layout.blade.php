@@ -40,14 +40,9 @@ $username = $userSession->username;
                                     <li><a class="dropdown-item" href="{{ route('createbatch') }}">Create Batch</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="contact.html">Documentation</a></li>
-                            <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
-                            <li class="nav-item"><a class="nav-link" href="pricing.html">Help</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                    <li>&nbsp;{{$fullname}}</li>
-                                    <li><hr class="dropdown-divider" /></li>
                                     @if(Auth::check())
                                         <li class="dropdown-item">
                                             <a href="{{ route('logout') }}" class="dropdown-item"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -65,7 +60,7 @@ $username = $userSession->username;
                 </div>
             </nav>
             
-            <section class="bg-light py-5">
+            <section class="bg-light py-5" style="min-height: 830px">
                 @yield('main')
                 
                 

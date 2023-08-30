@@ -7,14 +7,15 @@
 
 
 <div class="text-center mb-5">
-    <h1 class="fw-bolder">Insert Batch</h1>
+    <h1 class="fw-bolder">Create Batch</h1>
 
     @if($errors->has('btNumber'))
     <span class="text-danger">Batch number already exists. Please enter unique Batch Number</span>
     @endif
 
 </div>
-<div class="container px-5 my-5">
+<div class="container px-5 my-5" style="">
+    <div class="batchContainer">
     <form method="POST" action="{{ route('insertbatch') }}">
         @csrf
         @method('PUT')
@@ -45,10 +46,11 @@
         <br>
         <div class="btnDiv">
             <button class="btn btn-primary btn-lg px-4 me-sm-3" type="submit">Save</button>
-            <a class="btn btn-primary btn-lg px-4 me-sm-3" style="background-color: rgb(240, 58, 58);border-color:rgb(240, 58, 58)" href="{{ route('batches') }}">Cancel</a>
+            <a class="btn btn-primary btn-lg px-4 me-sm-3" style="background-color: rgb(240, 58, 58);border-color:rgb(240, 58, 58)" href="{{ route('/') }}">Cancel</a>
         </div>
     </form>
 
+</div>
 
 <div class="container px-5 my-5">
 @endsection
