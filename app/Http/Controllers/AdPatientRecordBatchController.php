@@ -52,6 +52,7 @@ class AdPatientRecordBatchController extends Controller
 
     public function update(Request $request, $id)
         {
+            //Gets current time
             $lastUpdated = Carbon::now();
             $lastUpdated = $lastUpdated->format('Y-m-d H:i:s');
 
