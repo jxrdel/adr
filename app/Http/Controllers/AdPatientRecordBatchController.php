@@ -131,7 +131,9 @@ class AdPatientRecordBatchController extends Controller
         $request->validate([
             'adRegistrationNo' => 'unique:adPatientRecord,adRegistrationNo',
         ]);
-        
+
+        //Set value for adExceptionalCase depending on if checkbox is selected
+        $adExceptionalCase = $request->has('adExceptionalCase') ? 1 : 0;
 
         adPatientRecord::create([
             'adRegistrationNo' => $request->input('adRegistrationNo'),
@@ -171,7 +173,7 @@ class AdPatientRecordBatchController extends Controller
         ]);
         
     
-        return redirect()->route('batches')->with('success', 'Batch entered successfully.');
+        return redirect()->route('viewbatchrecords', ['id' => $batchid])->with('success', 'Batch entered successfully.');
     }
 
     public function insertBatch(Request $request){

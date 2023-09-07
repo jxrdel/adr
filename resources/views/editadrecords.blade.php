@@ -39,7 +39,7 @@
                 
                             @foreach ($serials as $serial)
                             {{-- Changes selected option to the corresponding Serial--}}
-                            <option value="{{ $serial->srID }}" {{ $selectedserial == $serial->srID ? 'selected' : '' }}>{{ $serial->srID }}: {{ $serial->srTitle }}</option>
+                            <option value="{{ $serial->srID }}" {{ $selectedserial == $serial->srID ? 'selected' : '' }}>{{ $serial->srIMPS_ID }}: {{ $serial->srTitle }}</option>
                             @endforeach
                             </select>
                         </td>
@@ -73,7 +73,7 @@
                 
                             @foreach ($mstatuses as $mstatus)
                             {{-- Changes selected option to the corresponding Marital Status--}}
-                            <option value="{{ $mstatus->msID }}" {{ $selectedMS == $mstatus->msID ? 'selected' : '' }}>{{ $mstatus->msID }}: {{ $mstatus->msTitle }}</option>
+                            <option value="{{ $mstatus->msID }}" {{ $selectedMS == $mstatus->msID ? 'selected' : '' }}>{{ $mstatus->msIMPS_ID }}: {{ $mstatus->msTitle }}</option>
                             @endforeach
                             </select>
                             </td>
@@ -90,7 +90,7 @@
                 
                             @foreach ($sexes as $sex)
                             {{-- Changes selected option to the corresponding Sex--}}
-                            <option value="{{ $sex->sxIMPS_ID }}" {{ $selectedsex == $sex->sxIMPS_ID ? 'selected' : '' }}>{{ $sex->sxIMPS_ID }}: {{ $sex->sxTitle }}</option>
+                            <option value="{{ $sex->sxID }}" {{ $selectedsex == $sex->sxIMPS_ID ? 'selected' : '' }}>{{ $sex->sxIMPS_ID }}: {{ $sex->sxTitle }}</option>
                             @endforeach
                         </select></td>
                     </tr>
@@ -157,26 +157,26 @@
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 1 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis1_Block" value="{{$record->adDiagnosis1_Block}}">
-                                    . <input size="6" type="text" name="adDiagnosis1_BlockDetail" value="{{$record->adDiagnosis1_BlockDetail}}">
+                                <td><input size="6" type="text" name="adDiagnosis1_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis1_Block}}">
+                                    . <input size="6" type="text" name="adDiagnosis1_BlockDetail" pattern="^[0-9]$" title="Please enter 1 digit" value="{{$record->adDiagnosis1_BlockDetail}}">
                                 </td>
                                 
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 2 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis2_Block" value="{{$record->adDiagnosis2_Block}}">
+                                <td><input size="6" type="text" name="adDiagnosis2_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis2_Block}}">
                                     . <input size="6" type="text" name="adDiagnosis2_BlockDetail" value="{{$record->adDiagnosis2_BlockDetail}}">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 3 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis3_Block" value="{{$record->adDiagnosis3_Block}}"> . 
+                                <td><input size="6" type="text" name="adDiagnosis3_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis3_Block}}"> . 
                                     <input size="6" type="text" name="adDiagnosis3_BlockDetail" value="{{$record->addiagnosis3_BlockDetail}}">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 4 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis4_Block" value="{{$record->adDiagnosis4_Block}}"> . 
+                                <td><input size="6" type="text" name="adDiagnosis4_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis4_Block}}"> . 
                                     <input size="6" type="text" name="adDiagnosis4_BlockDetail" value="{{$record->adDiagnosis4_BlockDetail}}">
                                 </td>
                             </tr>
@@ -204,21 +204,6 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th><label for="title">Discharge Type</label></th>
-                                <td><select name="adDischargeTypeID" id="adDischargeTypeID">
-                            
-                                    {{-- Stores Hospital ID in a variable to determine selected option in the dropdown --}}
-                                    @php
-                                        $selectedDT = $record->dtID;
-                                    @endphp
-                        
-                                    @foreach ($dTypes as $dType)
-                                    {{-- Changes selected option to the corresponding Hospital Type--}}
-                                    <option value="{{ $dType->dtID }}" {{ $selectedDT == $dType->dtID ? 'selected' : '' }}>{{ $dType->dtID }}: {{ $dType->dtTitle }}</option>
-                                    @endforeach
-                                </select></td>
-                            </tr>
-                            <tr>
                                 <th><label for="title">Discharge Status</label></td>
                                 <td><select id="adDischargeStatusID" name="adDischargeStatusID" >
                             
@@ -233,12 +218,37 @@
                                     @endforeach
                                 </select></td>
                             </tr>
+                            <tr>
+                                <th><label for="title">Discharge Type</label></th>
+                                <td><select name="adDischargeTypeID" id="adDischargeTypeID">
+                            
+                                    {{-- Stores Hospital ID in a variable to determine selected option in the dropdown --}}
+                                    @php
+                                        $selectedDT = $record->dtID;
+                                    @endphp
+                        
+                                    @foreach ($dTypes as $dType)
+                                    {{-- Changes selected option to the corresponding Hospital Type--}}
+                                    <option value="{{ $dType->dtID }}" {{ $selectedDT == $dType->dtID ? 'selected' : '' }}>{{ $dType->dtID }}: {{ $dType->dtTitle }}</option>
+                                    @endforeach
+                                </select></td>
+                            </tr>
                         </table>
+
+                        
                     </div>       
                     </div>
-
                     
-                            
+                    <table style="margin: auto">
+                        <tr>
+                            <td><label for="title">Exceptional Case</label> &nbsp;<input type="checkbox" id="adExceptionalCase" name="adExceptionalCase"{{ $record->adExceptionalCase == 1 ? 'checked' : '' }}>
+                                &nbsp;&nbsp;(bypass ICD Validation, requires explanation entry below)</td>
+                        </tr>
+                        <tr>
+                            <td><textarea name="adExceptionalDesc" id="adExceptionalDesc" cols="80" rows="2">{{$record->adExceptionalDesc}}</textarea></td>
+                        </tr>
+                    </table>
+
                             @endforeach
 
                             <table style="display: flex;justify-content: center;align-items:">
@@ -260,6 +270,8 @@
                     const adDateOfDischarge = new Date(document.getElementById("adDateOfDischarge").value);
                     const adDischargeTypeID = document.getElementById("adDischargeTypeID").value;
                     const adDischargeStatusID = document.getElementById("adDischargeStatusID").value;
+                    const adExceptionalCase = document.getElementById("adExceptionalCase").value;
+                    const adExceptionalDesc = document.getElementById("adExceptionalDesc").value;
                     const estimatedDOB = document.getElementById("estimatedDOB");
 
                     if (document.getElementById('nodobCheckbox').checked && !document.getElementById('unknownDOB').checked && estimatedDOB.value === '') {
@@ -268,6 +280,9 @@
                     }else if ((adDischargeTypeID == 6 && adDischargeStatusID < 5) || (adDischargeStatusID >= 5 && adDischargeTypeID < 6)){
                         //Validation of Discharge Types/Statuses
                         alert("Discharge Type does not match Discharge Status");
+                    }else if (document.getElementById('adExceptionalCase').checked && adExceptionalDesc == '') {
+                        // User has to enter estimated age if the No DOB checkbox is selected and if the Unknown DOB checkbox is not selected
+                        alert('Please enter exceptional case details');
                     }else if (adDateOfAdmission.getTime() < adDateOfDischarge.getTime()) {
                     // If the start date is before the end date, submit the form
                     this.submit();

@@ -14,7 +14,7 @@
 </div>
 
 <div class="container">
-    <a class="btn btn-primary btn-lg px-4 me-sm-3"  href="{{ route('batches') }}"> <i class="bi bi-arrow-left"></i> Back</a>
+    <a class="btn btn-primary btn-lg px-4 me-sm-3"  href="{{ route('batches') }}"> <i class="bi bi-arrow-left"></i> Batches</a>
 
     <br>
     <br>

@@ -29,7 +29,7 @@
                         <td><select name="adSerialID">
                 
                             @foreach ($serials as $serial)
-                            <option value="{{ $serial->srID }}" >{{ $serial->srID }}: {{ $serial->srTitle }}</option>
+                            <option value="{{ $serial->srID }}" >{{ $serial->srIMPS_ID }}: {{ $serial->srTitle }}</option>
                             @endforeach
                             </select>
                         </td>
@@ -47,7 +47,7 @@
                         <th><label for="title">Marital Status</label></th>
                         <td><select name="adMaritalStatusID" >
                             @foreach ($mstatuses as $mstatus)
-                            <option value="{{ $mstatus->msID }}">{{ $mstatus->msID }}: {{ $mstatus->msTitle }}</option>
+                            <option value="{{ $mstatus->msID }}">{{ $mstatus->msIMPS_ID }}: {{ $mstatus->msTitle }}</option>
                             @endforeach
                             </select>
                             </td>
@@ -56,7 +56,7 @@
                         <th><label for="title">Sex</label></th>
                         <td><select name="adSexID" >
                             @foreach ($sexes as $sex)
-                            <option value="{{ $sex->sxIMPS_ID }}">{{ $sex->sxIMPS_ID }}: {{ $sex->sxTitle }}</option>
+                            <option value="{{ $sex->sxID }}">{{ $sex->sxIMPS_ID }}: {{ $sex->sxTitle }}</option>
                             @endforeach
                         </select></td>
                     </tr>
@@ -100,60 +100,51 @@
                         <table>
                             <tr>
                                 <th><label for="title">Diagnosis 1 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis1_Block">
-                                    . <input size="6" type="text" name="adDiagnosis1_BlockDetail">
+                                <td><input size="6" type="text" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" name="adDiagnosis1_Block">
+                                    . <input size="6" type="text" name="adDiagnosis1_BlockDetail" pattern="^[0-9]$" title="Enter a single digit (0-9)">
                                 </td>
                                 
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 2 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis2_Block">
-                                    . <input size="6" type="text" name="adDiagnosis2_BlockDetail">
+                                <td><input size="6" type="text" name="adDiagnosis2_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers">
+                                    . <input size="6" type="text" name="adDiagnosis2_BlockDetail" pattern="^[0-9]$" title="Enter a single digit (0-9)">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 3 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis3_Block"> . 
-                                    <input size="6" type="text" name="adDiagnosis3_BlockDetail">
+                                <td><input size="6" type="text" name="adDiagnosis3_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers"> . 
+                                    <input size="6" type="text" name="adDiagnosis3_BlockDetail" pattern="^[0-9]$" title="Enter a single digit (0-9)">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 4 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis4_Block"> . 
-                                    <input size="6" type="text" name="adDiagnosis4_BlockDetail">
+                                <td><input size="6" type="text" name="adDiagnosis4_Block" pattern="^[A-Za-z][0-9]{3}$" title="Please enter 1 letter follower by 3 numbers"> . 
+                                    <input size="6" type="text" name="adDiagnosis4_BlockDetail" pattern="^[0-9]$" title="Enter a single digit (0-9)">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Operation 1 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adOperation1_Block"> . 
-                                    <input size="6" type="text" name="adOperation1_BlockDetail">
+                                <td><input size="6" type="text" name="adOperation1_Block" pattern="[A-Za-z0-9]{2}" title="Enter three letters or numbers"> . 
+                                    <input size="6" type="text" name="adOperation1_BlockDetail" pattern="^[0-9]$" title="Enter a single digit (0-9)">
                                 </td>
                             <tr>
                                 <th><label for="title">Operation 2 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adOperation2_Block"> . 
-                                    <input size="6" type="text" name="adOperation2_BlockDetail">
+                                <td><input size="6" type="text" name="adOperation2_Block" pattern="[A-Za-z0-9]{2}" title="Enter three letters or numbers"> . 
+                                    <input size="6" type="text" name="adOperation2_BlockDetail" pattern="^[0-9]$" title="Enter a single digit (0-9)">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Death &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adCauseOfDeath_Block"> . 
-                                    <input size="6" type="text" name="adCauseOfDeath_BlockDetail">
+                                <td><input size="6" type="text" name="adCauseOfDeath_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers"> . 
+                                    <input size="6" type="text" name="adCauseOfDeath_BlockDetail" pattern="^[0-9]$" title="Enter a single digit (0-9)">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">E-Code &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adECode_Block"> . 
-                                    <input size="6" type="text" name="adECode_BlockDetail">
+                                <td><input size="6" type="text" name="adECode_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers"> . 
+                                    <input size="6" type="text" name="adECode_BlockDetail" pattern="^[0-9]$" title="Enter a single digit (0-9)">
                                 </td>
-                            </tr>
-                            <tr>
-                                <th><label for="title">Discharge Type</label></th>
-                                <td><select name="adDischargeTypeID" id="adDischargeTypeID">
-                                    @foreach ($dTypes as $dType)
-                                    {{-- Changes selected option to the corresponding Hospital Type--}}
-                                    <option value="{{ $dType->dtID }}">{{ $dType->dtID }}: {{ $dType->dtTitle }}</option>
-                                    @endforeach
-                                </select></td>
                             </tr>
                             <tr>
                                 <th><label for="title">Discharge Status</label></td>
@@ -163,11 +154,28 @@
                                     @endforeach
                                 </select></td>
                             </tr>
+                            <tr>
+                                <th><label for="title">Discharge Type</label></th>
+                                <td><select name="adDischargeTypeID" id="adDischargeTypeID">
+                                    @foreach ($dTypes as $dType) 
+                                    {{-- Changes selected option to the corresponding Hospital Type--}}
+                                    <option value="{{ $dType->dtID }}">{{ $dType->dtID }}: {{ $dType->dtTitle }}</option>
+                                    @endforeach
+                                </select></td>
+                            </tr>
                         </table>
                     </div>       
                     </div>
 
-                    
+                    <table style="margin: auto">
+                        <tr>
+                            <td><label for="title">Exceptional Case</label> &nbsp;<input type="checkbox" id="adExceptionalCase" name="adExceptionalCase">
+                                &nbsp;&nbsp;(bypass ICD Validation, requires explanation entry below)</td>
+                        </tr>
+                        <tr>
+                            <td><textarea name="adExceptionalDesc" id="adExceptionalDesc" cols="80" rows="2"></textarea></td>
+                        </tr>
+                    </table>
                             
                             
 
@@ -190,6 +198,8 @@
                     const adDateOfDischarge = new Date(document.getElementById("adDateOfDischarge").value);
                     const adDischargeTypeID = document.getElementById("adDischargeTypeID").value;
                     const adDischargeStatusID = document.getElementById("adDischargeStatusID").value;
+                    const adExceptionalCase = document.getElementById("adExceptionalCase").value;
+                    const adExceptionalDesc = document.getElementById("adExceptionalDesc").value;
                     const adDateOfBirth = document.getElementById("adDateOfBirth");
                     const estimatedDOB = document.getElementById("estimatedDOB");
 
@@ -199,13 +209,16 @@
                     }else if ((adDischargeTypeID == 6 && adDischargeStatusID < 5) || (adDischargeStatusID >= 5 && adDischargeTypeID < 6)){
                         //Validation of Discharge Types/Statuses
                         alert("Discharge Type does not match Discharge Status");
+                    }else if (document.getElementById('adExceptionalCase').checked && adExceptionalDesc == '') {
+                        // User has to enter estimated age if the No DOB checkbox is selected and if the Unknown DOB checkbox is not selected
+                        alert('Please enter exceptional case details');
                     }else if (!document.getElementById('nodobCheckbox').checked && adDateOfBirth.value === ""){
                         alert("Please enter Date of Birth");
                     }else if (adDateOfAdmission.getTime() > adDateOfDischarge.getTime()) {
                         // If the start date is not before the end date, show an error message
-                    alert("Date of discharge must be after date of admission");
+                    alert("Date of admission cannot be after date of date of discharge");
                     } else {
-                    // If the start date is before the end date, submit the form
+                    // If everything is validated
                     this.submit();
 
                     
