@@ -4,10 +4,20 @@
 
 <div class="text-center mb-5">
     <h1 class="fw-bolder">Edit Record</h1>
+    
+    @php
+        $thisYear = \Carbon\Carbon::now()->format('Y');
+    @endphp
 
-    {{-- Displays eroor if Registration Number entered already exists --}}
-    @if($errors->has('adRegistrationNo'))
-        <span class="text-danger">Registration number already exists. Please enter unique Registration Number</span>
+    {{-- Display errors --}}
+    @if($errors->any())
+        <div class="alert alert-danger" style="display:flex; justify-content:center">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
 </div>
 
@@ -25,7 +35,7 @@
                     <tr>
                         <th><label for="title">Registration Number &nbsp;</label></th>
                         {{-- Input field only allows an input of 6 digits --}}
-                        <td><input required pattern="[0-9]{6}" title="Please enter 6 digits only" size="20" type="text" name="adRegistrationNo" value="{{$record->adRegistrationNo}}"></td>
+                        <td><input pattern="[0-9]{6}" title="Please enter 6 digits only" size="20" type="text" name="adRegistrationNo" value="{{$record->adRegistrationNo}}"></td>
                     </tr>
 
                     <tr>
@@ -47,17 +57,24 @@
 
                     <tr>
                         <th><label for="title">Residential Zone</label></th>
-                        <td><select name="adAddress_ZoneID" >
-                    
-                            {{-- Stores Address Zone ID in a variable to determine selected option in the dropdown --}}
-                            @php
+
+                        @php
                                 $selectedrz = $record->rzID;
-                            @endphp
-                
-                            @foreach ($rzones as $rzone)
-                            {{-- Changes selected option to the corresponding Address Zone--}}
-                            <option value="{{ $rzone->rzID }}" {{ $selectedrz == $rzone->rzID ? 'selected' : '' }}>{{ $rzone->rzIMPS_ID }}: {{ $rzone->rzTitle }}</option>
-                            @endforeach
+                        @endphp
+
+                        <td><select name="adAddress_ZoneID" >
+                            <option Value="pos">0: Port-of-Spain</option>
+                            <option Value="sfd">1: San Fernando</option>
+                            <option Value="arm">2: Arima</option>
+                            <option value="1" {{ $selectedrz == 1 ? 'selected' : '' }}>3: St. George</option>
+                            <option Value="2" {{ $selectedrz == 2 ? 'selected' : '' }}>4: Caroni</option>
+                            <option Value="3" {{ $selectedrz == 3 ? 'selected' : '' }}>5: Nariva / Mayaro</option>
+                            <option Value="4" {{ $selectedrz == 4 ? 'selected' : '' }}>6: St. Andrew / St. David</option>
+                            <option Value="5" {{ $selectedrz == 5 ? 'selected' : '' }}>7: Victoria</option>
+                            <option Value="6" {{ $selectedrz == 6 ? 'selected' : '' }}>8: St. Patrick</option>
+                            <option Value="7" {{ $selectedrz == 7 ? 'selected' : '' }}>9: Tobago</option>
+                            <option Value="8" {{ $selectedrz == 8 ? 'selected' : '' }}>X: Not Stated</option>
+                            <option Value="9" {{ $selectedrz == 9 ? 'selected' : '' }}>Y: Foreign</option>
                             </select>
                         </td>
                     </tr>
@@ -112,7 +129,7 @@
 
                     <tr>
                         <th><label for="title">Date of Birth</label></th>
-                        <td><input type="date" name="adDateOfBirth" value="{{$record->formatted_adDateOfBirth}}">   &nbsp;&nbsp;No DOB?&nbsp;<input type="checkbox" id="nodobCheckbox" name="nodobCheckbox"></td>
+                        <td><input id="adDateOfBirth" type="date" name="adDateOfBirth" value="{{$record->formatted_adDateOfBirth}}">   &nbsp;&nbsp;No DOB?&nbsp;<input type="checkbox" id="nodobCheckbox" name="nodobCheckbox"></td>
                     </tr>
 
                     <tr class="hidden-row" style="display: none">
@@ -152,55 +169,55 @@
                     <div class="table-container">
                         <table>
                             <tr style="display: none">
-                                <th><input size="6" type="text" name="username" value="MOH\{{auth()->user()->username}}"></th>
+                                <th><input size="6" type="text" name="username" value="{{$_SERVER['AUTH_USER']}}"></th>
                                 
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 1 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis1_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis1_Block}}">
-                                    . <input size="6" type="text" name="adDiagnosis1_BlockDetail" pattern="^[0-9]$" title="Please enter 1 digit" value="{{$record->adDiagnosis1_BlockDetail}}">
+                                <td><input size="6" type="text" name="adDiagnosis1_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis1_Block}}" maxlength="3">
+                                    . <input size="6" type="text" name="adDiagnosis1_BlockDetail" pattern="^[0-9]$" title="Please enter 1 digit" value="{{$record->adDiagnosis1_BlockDetail}}" maxlength="1">
                                 </td>
                                 
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 2 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis2_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis2_Block}}">
-                                    . <input size="6" type="text" name="adDiagnosis2_BlockDetail" value="{{$record->adDiagnosis2_BlockDetail}}">
+                                <td><input size="6" type="text" name="adDiagnosis2_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis2_Block}}" maxlength="3">
+                                    . <input size="6" type="text" name="adDiagnosis2_BlockDetail" value="{{$record->adDiagnosis2_BlockDetail}}" maxlength="1">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 3 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis3_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis3_Block}}"> . 
-                                    <input size="6" type="text" name="adDiagnosis3_BlockDetail" value="{{$record->addiagnosis3_BlockDetail}}">
+                                <td><input size="6" type="text" name="adDiagnosis3_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis3_Block}}" maxlength="3"> . 
+                                    <input size="6" type="text" name="adDiagnosis3_BlockDetail" value="{{$record->addiagnosis3_BlockDetail}}" maxlength="1">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 4 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis4_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis4_Block}}"> . 
-                                    <input size="6" type="text" name="adDiagnosis4_BlockDetail" value="{{$record->adDiagnosis4_BlockDetail}}">
+                                <td><input size="6" type="text" name="adDiagnosis4_Block" pattern="^[A-Za-z][0-9]{3}$" title="Please enter 1 letter follower by 3 numbers" value="{{$record->adDiagnosis4_Block}}" maxlength="4"> . 
+                                    <input size="6" type="text" name="adDiagnosis4_BlockDetail" value="{{$record->adDiagnosis4_BlockDetail}}" maxlength="1">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Operation 1 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adOperation1_Block" value="{{$record->adOperation1_Block}}"> . 
-                                    <input size="6" type="text" name="adOperation1_BlockDetail" value="{{$record->adOperation1_BlockDetail}}">
+                                <td><input size="6" type="text" name="adOperation1_Block" value="{{$record->adOperation1_Block}}" maxlength="2"> . 
+                                    <input size="6" type="text" name="adOperation1_BlockDetail" value="{{$record->adOperation1_BlockDetail}}" maxlength="1">
                                 </td>
                             <tr>
                                 <th><label for="title">Operation 2 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adOperation2_Block" value="{{$record->adOperation2_Block}}"> . 
-                                    <input size="6" type="text" name="adOperation2_BlockDetail" value="{{$record->adOperation2_BlockDetail}}">
+                                <td><input size="6" type="text" name="adOperation2_Block" value="{{$record->adOperation2_Block}}" maxlength="2"> . 
+                                    <input size="6" type="text" name="adOperation2_BlockDetail" value="{{$record->adOperation2_BlockDetail}}" maxlength="1">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Death &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adCauseOfDeath_Block" value="{{$record->adCauseOfDeath_Block}}"> . 
-                                    <input size="6" type="text" name="adCauseOfDeath_BlockDetail" value="{{$record->adCauseOfDeath_BlockDetail}}">
+                                <td><input size="6" type="text" name="adCauseOfDeath_Block" value="{{$record->adCauseOfDeath_Block}}" maxlength="3"> . 
+                                    <input size="6" type="text" name="adCauseOfDeath_BlockDetail" value="{{$record->adCauseOfDeath_BlockDetail}}" maxlength="1">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">E-Code &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adECode_Block" value="{{$record->adECode_Block}}"> . 
-                                    <input size="6" type="text" name="adECode_BlockDetail" value="{{$record->adECode_BlockDetail}}">
+                                <td><input size="6" type="text" name="adECode_Block" value="{{$record->adECode_Block}}"  maxlength="3"> . 
+                                    <input size="6" type="text" name="adECode_BlockDetail" value="{{$record->adECode_BlockDetail}}" maxlength="1">
                                 </td>
                             </tr>
                             <tr>
@@ -254,7 +271,7 @@
                             <table style="display: flex;justify-content: center;align-items:">
                                 <tr>
                                     <td><br><button class="btn btn-primary btn-lg px-4 me-sm-3" type="submit">Save</button></td>
-                                    <td><br><a class="btn btn-primary btn-lg px-4 me-sm-3" style="background-color: rgb(240, 58, 58);border-color:rgb(240, 58, 58)" href="{{ route('adrecords') }}">Cancel</a></td>
+                                    <td><br><a class="btn btn-primary btn-lg px-4 me-sm-3" style="background-color: rgb(240, 58, 58);border-color:rgb(240, 58, 58)" href="{{ route('records', ['year' => $thisYear, 'page' => 1]) }}">Cancel</a></td>
                                 </tr>
                             </table> 
                 
@@ -272,6 +289,7 @@
                     const adDischargeStatusID = document.getElementById("adDischargeStatusID").value;
                     const adExceptionalCase = document.getElementById("adExceptionalCase").value;
                     const adExceptionalDesc = document.getElementById("adExceptionalDesc").value;
+                    const adDateOfBirth = document.getElementById("adDateOfBirth").value;
                     const estimatedDOB = document.getElementById("estimatedDOB");
 
                     if (document.getElementById('nodobCheckbox').checked && !document.getElementById('unknownDOB').checked && estimatedDOB.value === '') {
@@ -283,17 +301,39 @@
                     }else if (document.getElementById('adExceptionalCase').checked && adExceptionalDesc == '') {
                         // User has to enter estimated age if the No DOB checkbox is selected and if the Unknown DOB checkbox is not selected
                         alert('Please enter exceptional case details');
-                    }else if (adDateOfAdmission.getTime() < adDateOfDischarge.getTime()) {
-                    // If the start date is before the end date, submit the form
-                    this.submit();
+                    }else if (adDateOfAdmission.getTime() > adDateOfDischarge.getTime()) {
+                        // If the start date is not before the end date, show an error message
+                    alert("Date of admission cannot be after date of date of discharge");
+                    }else if (!isDateValid(adDateOfBirth)){
+                        // Checks DOB
+                    alert("Please check date of birth");
+                    } else if (!isDateValid(adDateOfAdmission)){
+                        // Checks DOB
+                    alert("Please check date of admission");
+                    } else if (!isDateValid(adDateOfDischarge)){
+                        // Checks DOB
+                    alert("Please check date of discharge");
                     } else {
-                    // If the start date is not before the end date, show an error message
-                    alert("Date of discharge must be after date of admission");
+                    // If everything is validated
+                    this.submit();
 
                     
                 }
                 
                 });
+				
+				
+				function isDateValid(inputDate) {
+                    // Create a Max and minimum dates
+                    const mindate = new Date(1900, 0, 1); // Months are zero-based (0 = January)
+                    const maxdate = new Date(9999, 0, 1); // Months are zero-based (0 = January)
+
+                    // Create a Date object from the input date string
+                    const inputDateObject = new Date(inputDate);
+
+                   
+                    return (mindate < inputDateObject) && (inputDateObject < maxdate);
+                }
 
                 const checkbox = document.getElementById('nodobCheckbox');
                 const row = document.querySelector('.hidden-row');

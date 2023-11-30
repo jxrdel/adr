@@ -21,7 +21,7 @@
         @method('PUT')
         <table style="align-content: center" id="editTable">
             <tr style="display: none">
-                <th><input size="6" type="text" name="username" value="MOH\{{auth()->user()->username}}"></th>
+                <th><input size="6" type="text" name="username" value="{{$_SERVER['AUTH_USER']}}"></th>
                 
             </tr>
             <tr>

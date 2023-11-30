@@ -55,7 +55,10 @@
                                 the parent batch or the hospital.</p>
                                 <br>
                         </div>
-                        <div class="d-grid"><a class="btn btn-outline-primary" href="{{ route('adrecords') }}"> <i class="bi bi-card-list"></i></i></i> View Records</a></div>
+                        @php
+                            $currentYear = date('Y');
+                        @endphp
+                        <div class="d-grid"><a class="btn btn-outline-primary" href="{{ route('records', ['year' => $currentYear, 'page' => 1]) }}"> <i class="bi bi-card-list"></i></i></i> View Records</a></div>
                     </div>
                 </div>
             </div>

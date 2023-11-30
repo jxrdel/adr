@@ -15,34 +15,55 @@ use App\Models\adMaritalStatus;
 use App\Models\adResidenceZone;
 use App\Models\adSex;
 use App\Models\adSerial;
+use App\Models\adAgeGroups;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 use Illuminate\Support\Facades\DB;
 
 use App\Models\adPatientRecordBatch;
+use App\Rules\AgeDiagnosis;
+use App\Rules\GenderDiagnosis;
+use App\Rules\InvalidDiagnosisCode;
+use App\Rules\InvalidECode;
+use App\Rules\MissingECode;
 
 class AdPatientRecordBatchController extends Controller
 {
-    public function index(){
+    public function index()
+    {
 
-        //Returns batch information along with a count of the records for each batch
-        $batches = DB::table('adPatientRecordBatch')
-        ->leftJoin('adPatientRecord', 'adPatientRecordBatch.btID', '=', 'adPatientRecord.adBatchID')
-        ->join('adHospitals', 'adPatientRecordBatch.btHospitalID', '=', 'adHospitals.hsID')
-        ->select('adPatientRecordBatch.*', 'adHospitals.hsTitle as hsTitle', 'adHospitals.hsCode as hsCode', DB::raw('COUNT(adPatientRecord.adBatchID) as batch_count'))
-        ->groupBy('adPatientRecordBatch.btID', 'adPatientRecordBatch.btNumber', 'adPatientRecordBatch.btHospitalID', 'adPatientRecordBatch.btCreatedBy', 
-        'adPatientRecordBatch.btCreatedDate', 'adPatientRecordBatch.btLastUpdatedBy', 'adPatientRecordBatch.btLastUpdatedDate', 'adHospitals.hsTitle', 'adHospitals.hsCode')
-        ->get();
+        return view('batches');
+    }
+	
+	
+	public function getBatches()
+    {
+        $query = adPatientRecordBatch::select('adPatientRecordBatch.*', 'adHospitals.hsTitle as hsTitle', 'adHospitals.hsCode as hsCode', DB::raw('COUNT(adPatientRecord.adBatchID) as batch_count'))
+            ->leftJoin('adPatientRecord', 'adPatientRecordBatch.btID', '=', 'adPatientRecord.adBatchID')
+            ->join('adHospitals', 'adPatientRecordBatch.btHospitalID', '=', 'adHospitals.hsID')
+            ->groupBy(
+                'adPatientRecordBatch.btID',
+                'adPatientRecordBatch.btNumber',
+                'adPatientRecordBatch.btHospitalID',
+                'adPatientRecordBatch.btCreatedBy',
+                'adPatientRecordBatch.btCreatedDate',
+                'adPatientRecordBatch.btLastUpdatedBy',
+                'adPatientRecordBatch.btLastUpdatedDate',
+                'adHospitals.hsTitle',
+                'adHospitals.hsCode'
+            );
 
-
-    return view('batches', ['batches' => $batches]);
+        return datatables($query)->make(true);
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         //Retrieves batch info for batch
         $batches = adPatientRecordBatch::select('adPatientRecordBatch.*', 'adHospitals.hsTitle as hsTitle', 'adHospitals.hsIMPS_ID as hsIMPS_ID')
-        ->join('adHospitals', 'adPatientRecordBatch.btHospitalID', '=', 'adHospitals.hsID')
-        ->where('adPatientRecordBatch.btID',$id)
-        ->get();
+            ->join('adHospitals', 'adPatientRecordBatch.btHospitalID', '=', 'adHospitals.hsID')
+            ->where('adPatientRecordBatch.btID', $id)
+            ->get();
 
         //Retrieves hospital info to be able to select hospitals from drop-down
         $hospitals = adHospitals::all();
@@ -51,57 +72,176 @@ class AdPatientRecordBatchController extends Controller
     }
 
     public function update(Request $request, $id)
-        {
-            //Gets current time
-            $lastUpdated = Carbon::now();
-            $lastUpdated = $lastUpdated->format('Y-m-d H:i:s');
-
-            //If a change is made to the batch record, validation is done to ensure new batch number is unique
-            $previous = adPatientRecordBatch::find($id);
-            $previousbtNumber = $previous->btNumber;
-            $newbtNumber = $request->input('btNumber');
-
-            if ($previousbtNumber != $newbtNumber){
-                $request->validate([
-                    'btNumber' => 'unique:adPatientRecordBatch,btNumber',
-                ]);
-            }
-            
-
-            adPatientRecordBatch::where('btID', $id)->update([
-                'btNumber' => $request->input('btNumber'),
-                'btHospitalID' => $request->input('btHospitalID'),
-                'btLastUpdatedBy' => $request->input('username'),
-                'btLastUpdatedDate' => $lastUpdated,
-            ]);
-
-            return redirect()->route('batches')->with('success', 'Batch updated successfully.');
-        }
-
-        public function createBatchRecord($batchid){
-            $sexes = adSex::all();
-            $serials = adSerial::all();
-            $rzones = adResidenceZone::all();
-            $mstatuses = adMaritalStatus::all();
-            $dStatuses = adDischargeStatus::all();
-            $dTypes = adDischargeType::all();
-            $ethnicities = adEthnicity::all();
-            $departments = adDepartment::all();
-            $batch = adPatientRecordBatch::find($batchid);
-            
-
-
-            $combined = compact('sexes', 'serials', 'rzones', 'mstatuses', 'dStatuses', 'dTypes', 'ethnicities', 'departments', 'batch');
-
-            return view('createbatchrecord', $combined);
-        }
-
-    public function insertBatchRecord(Request $request, $batchid){
-        $user = $request->input('username');
-        
-        //Set time for last updated
+    {
+        //Gets current time
         $lastUpdated = Carbon::now();
         $lastUpdated = $lastUpdated->format('Y-m-d H:i:s');
+
+        //If a change is made to the batch record, validation is done to ensure new batch number is unique
+        $previous = adPatientRecordBatch::find($id);
+        $previousbtNumber = $previous->btNumber;
+        $newbtNumber = $request->input('btNumber');
+
+        if ($previousbtNumber != $newbtNumber) {
+            $request->validate([
+                'btNumber' => 'unique:adPatientRecordBatch,btNumber',
+            ]);
+        }
+
+
+        adPatientRecordBatch::where('btID', $id)->update([
+            'btNumber' => $request->input('btNumber'),
+            'btHospitalID' => $request->input('btHospitalID'),
+            'btLastUpdatedBy' => $request->input('username'),
+            'btLastUpdatedDate' => $lastUpdated,
+        ]);
+
+        return redirect()->route('batches')->with('success', 'Batch updated successfully.');
+    }
+
+    public function createBatchRecord($batchid)
+    {
+        $sexes = adSex::all();
+        $serials = adSerial::all();
+        $rzones = adResidenceZone::all();
+        $mstatuses = adMaritalStatus::all();
+        $dStatuses = adDischargeStatus::all();
+        $dTypes = adDischargeType::all();
+        $ethnicities = adEthnicity::all();
+        $departments = adDepartment::all();
+        $batch = adPatientRecordBatch::find($batchid);
+        $batchowner = $batch->btCreatedBy;
+        $batchowner = strtolower($batchowner);
+
+
+
+        $combined = compact('sexes', 'serials', 'rzones', 'mstatuses', 'dStatuses', 'dTypes', 'ethnicities', 'departments', 'batch', 'batchowner');
+
+        return view('createbatchrecord', $combined);
+    }
+
+    private function getAddressTownID($value)
+    {
+        switch ($value) {
+            case 'pos':
+                // ' Town: Port-of-Spain
+                $town = '1';
+                return $town;
+                break;
+
+            case 'sfd':
+                // Town: San Fernando
+                $town = '2';
+                return $town;
+                break;
+
+            case 'arm':
+                // Town: Arima
+                $town = '3';
+                return $town;
+                break;
+
+            default:
+                // Unknown Town
+                $town = '0';
+                return $town;
+                break;
+        }
+    }
+
+    private function getAddressZoneID($value)
+    {
+        switch ($value) {
+            case 'pos':
+                // ' POS => County:St. George
+                $zone = '1';
+                return $zone;
+                break;
+
+            case 'sfd':
+                // San Fernando => County:Victoria
+                $zone = '5';
+                return $zone;
+                break;
+
+            case 'arm':
+                // Arima => County:St. George
+                $zone = '1';
+                return $zone;
+                break;
+
+            default:
+                // Return same value entered
+                return $value;
+                break;
+        }
+    }
+
+    public function getAgeAtAD($startDate, $endDate)
+    {
+        $startDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
+
+        $diff = $startDate->diff($endDate);
+
+        $yearsDiff = $diff->y;
+        $monthsDiff = $diff->m;
+        $daysDiff = $diff->d;
+
+        $response = [
+            'years' => $yearsDiff,
+            'months' => $monthsDiff,
+            'days' => $daysDiff,
+        ];
+
+
+        return $response;
+    }
+
+    public function daysDifference($startDate, $endDate)
+    {
+
+        $startDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
+
+        $diffInDays = $startDate->diffInDays($endDate);
+        $diffInDays = $diffInDays + 1;
+
+        return $diffInDays;
+    }
+
+    public function getAgeGroup($age)
+    {
+        $years = $age['years'];
+        $months = $age['months'];
+        $days = $age['days'];
+        $ageGroups = adAgeGroups::all();
+
+        if ($years <= 0 && $months <= 0) {
+            return 1;
+        } elseif ($years <= 0 && $months >= 1) {
+            return 2;
+        } else {
+            foreach ($ageGroups as $ageGroup) {
+                if ($years >= $ageGroup->agYearsMin && $years <= $ageGroup->agYearsMax) {
+                    return $ageGroup->agID;
+                }
+            }
+            return 20;
+        }
+    }
+
+    public function insertBatchRecord(Request $request, $batchid)
+    {
+		try {$user = $request->input('username');
+
+        $adAddress_TownID = $this->getAddressTownID($request->input('adAddress_ZoneID'));
+
+        $adAddress_ZoneID = $this->getAddressZoneID($request->input('adAddress_ZoneID'));
+
+        //Get current time
+        $now = Carbon::now();
+        $now = $now->format('Y-m-d H:i:s');
 
         //Set value for adDateOfBirthUnknown depending on if checkbox is selected
         $adDateOfBirthUnknown = $request->has('adDateOfBirthUnknown') ? 1 : 0;
@@ -113,39 +253,84 @@ class AdPatientRecordBatchController extends Controller
         $adExceptionalCase = $request->has('adExceptionalCase') ? 1 : 0;
 
         //Set estimated Date of Birth
-        if ($noDOB == '1' && $adDateOfBirthUnknown == '0'){
+        if ($noDOB == '1' && $adDateOfBirthUnknown == '0') {
 
-                $years = $request->input('estimatedDOB');
-                $today = Carbon::now();
-                $estimatedDOB = $today->subYears($years);
-                $estimatedDOB = $estimatedDOB->format('Y-m-d');
-                $dobADR = $estimatedDOB;
-                $isEstimated = 1;
-
-        }else{
+            $years = $request->input('estimatedDOB');
+            $today = Carbon::now();
+            $estimatedDOB = $today->subYears($years);
+            $estimatedDOB = $estimatedDOB->format('Y-m-d');
+            $dobADR = $estimatedDOB;
+            $isEstimated = 1;
+        } else {
             $dobADR = $request->input('adDateOfBirth'); //DOB is unchanged if there is no estimated DOB
             $isEstimated = 0;
         }
 
         // Validation of Registration #
-        $request->validate([
-            'adRegistrationNo' => 'unique:adPatientRecord,adRegistrationNo',
-        ]);
+        // $request->validate([
+        //     'adRegistrationNo' => 'unique:adPatientRecord,adRegistrationNo',
+        // ]);
 
         //Set value for adExceptionalCase depending on if checkbox is selected
         $adExceptionalCase = $request->has('adExceptionalCase') ? 1 : 0;
+
+        //Set adAge attributes
+        $ageAtAdmission = $this->getAgeAtAD($request->input('adDateOfBirth'), $request->input('adDateOfAdmission'));
+        $adAgeAdmission_Years = $ageAtAdmission['years'];
+        $adAgeAdmission_Months = $ageAtAdmission['months'];
+        $adAgeAdmission_Days = $ageAtAdmission['days'];
+
+
+        $ageAtDischarge = $this->getAgeAtAD($request->input('adDateOfBirth'), $request->input('adDateOfDischarge'));
+        $adAgeDischarge_Years = $ageAtDischarge['years'];
+        $adAgeDischarge_Months = $ageAtDischarge['months'];
+        $adAgeDischarge_Days = $ageAtDischarge['days'];
+
+        //Set AgeGroup
+        $ageGroup = $this->getAgeGroup($ageAtAdmission);
+
+        //Length of stay
+        $adLengthOfStay = $this->daysDifference($request->input('adDateOfAdmission'), $request->input('adDateOfDischarge'));
+
+        //Validate data if it is NOT an exceptional case
+        if ($adExceptionalCase == 0) {
+            //Validation
+            $rules = [
+                'adRegistrationNo' => 'required',
+                'adDateOfAdmission' => 'required',
+                'adDateOfDischarge' => 'required',
+                'adDiagnosis1_Block' => ['required', new GenderDiagnosis, new AgeDiagnosis, new InvalidDiagnosisCode],
+                'ecode' => [new MissingECode, new InvalidECode],
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                // If validation fails, redirect back to the form with errors with the input
+                return redirect()->route('createbatchrecord', ['id' => $batchid])->withErrors($validator)->withInput();
+            }
+        }
 
         adPatientRecord::create([
             'adRegistrationNo' => $request->input('adRegistrationNo'),
             'adSerialID' => $request->input('adSerialID'),
             'adBatchID' => $batchid,
-            'adAddress_ZoneID' => $request->input('adAddress_ZoneID'),
+            'adAddress_TownID' => $adAddress_TownID,
+            'adAddress_ZoneID' => $adAddress_ZoneID,
             'adMaritalStatusID' => $request->input('adMaritalStatusID'),
             'adSexID' => $request->input('adSexID'),
             'adEthnicityID' => $request->input('adEthnicityID'),
             'adDateOfBirth' => $dobADR,
             'adDateOfBirthEstimated' => $isEstimated,
             'adDateOfBirthUnknown' => $adDateOfBirthUnknown,
+            'adAgeAdmission_Years' => $adAgeAdmission_Years,
+            'adAgeAdmission_Months' => $adAgeAdmission_Months,
+            'adAgeAdmission_Days' => $adAgeAdmission_Days,
+            'adAgeDischarge_Years' => $adAgeDischarge_Years,
+            'adAgeDischarge_Months' => $adAgeDischarge_Months,
+            'adAgeDischarge_Days' => $adAgeDischarge_Days,
+            'adAgeGroup' => $ageGroup,
+            'adLengthOfStay' => $adLengthOfStay,
             'adDateOfAdmission' => $request->input('adDateOfAdmission'),
             'adDateOfDischarge' => $request->input('adDateOfDischarge'),
             'adDepartmentID' => $request->input('adDepartmentID'),
@@ -165,20 +350,26 @@ class AdPatientRecordBatchController extends Controller
             'adECode_BlockDetail' => $request->input('adECode_BlockDetail'),
             'adDischargeStatusID' => $request->input('adDischargeStatusID'),
             'adDischargeTypeID' => $request->input('adDischargeTypeID'),
-            'adLastUpdatedDate' => $lastUpdated,
+            'adCreatedDate' => $now,
+            'adLastUpdatedDate' => $now,
             'adExceptionalCase' => $adExceptionalCase,
             'adExceptionalDesc' => $request->input('adExceptionalDesc'),
             'adCreatedBy' => $user,
             'adLastUpdatedBy' => $user,
         ]);
-        
-    
+
+
         return redirect()->route('viewbatchrecords', ['id' => $batchid])->with('success', 'Batch entered successfully.');
+        } catch (\Exception $exception) {
+            dd($exception->getMessage());
+        }
+        
     }
 
-    public function insertBatch(Request $request){
+    public function insertBatch(Request $request)
+    {
         $user = $request->input('username');
-        
+
         $today = Carbon::now();
         $today = $today->format('Y-m-d H:i:s');
 
@@ -198,19 +389,31 @@ class AdPatientRecordBatchController extends Controller
         return redirect()->route('batches')->with('success', 'Batch entered successfully.');
     }
 
-    public function createBatch(){
+    public function createBatch()
+    {
         $hospitals = adHospitals::all();
 
         return view('createbatch', ['hospitals' => $hospitals]);
     }
 
-    public function viewBatchRecords($batchid){
+    public function viewBatchRecords($batchid)
+    {
         $records = adPatientRecord::select('adPatientRecord.*', 'adPatientRecordBatch.btNumber as btNumber', 'adHospitals.hsTitle as hsTitle')
-        ->join('adPatientRecordBatch', 'adPatientRecord.adBatchID', '=', 'adPatientRecordBatch.btID')
-        ->join('adHospitals', 'adPatientRecordBatch.btHospitalID', '=', 'adHospitals.hsID')
-        ->where('adPatientRecord.adBatchID',$batchid)
-        ->get();
-        
-        return view('viewbatchrecords', ['records' => $records]);
+            ->join('adPatientRecordBatch', 'adPatientRecord.adBatchID', '=', 'adPatientRecordBatch.btID')
+            ->join('adHospitals', 'adPatientRecordBatch.btHospitalID', '=', 'adHospitals.hsID')
+            ->where('adPatientRecord.adBatchID', $batchid)
+            ->get();
+
+        $recordcount = adPatientRecord::where('adBatchID', $batchid)->count();
+
+        $batch = adPatientRecordBatch::find($batchid);
+        $recordcount = adPatientRecord::where('adBatchID', $batchid)->count();
+        $batchowner = $batch->btCreatedBy;
+		$batchowner = strtolower($batchowner);
+        $batchno = $batch->btNumber;
+
+        $combined = compact('records', 'batchid', 'batchno', 'recordcount', 'batchowner', 'recordcount');
+
+        return view('viewbatchrecords', $combined);
     }
 }

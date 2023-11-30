@@ -9,6 +9,12 @@ class adAgeGroups extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
+    protected $table = 'adAgeGroups';
+
+    protected $primaryKey = 'agID';
+
     protected $fillable = [
         'agID',
         'agIMPS_AgeGroupID',
