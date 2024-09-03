@@ -167,7 +167,7 @@
                             <tr>
                                 <th><label for="title">Diagnosis 3 &nbsp;</label></th>
                                 <td><input size="6" type="text" name="adDiagnosis3_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{ old('adDiagnosis3_Block') }}" maxlength="3"> . 
-                                    <input size="6" type="text" name="adDiagnosis3_BlockDetail" pattern="^[0-9]$" title="Enter a single digit (0-9)" value="{{ old('adDiagnosis3_BlockDetail') }}" maxlength="1">
+                                    <input size="6" type="text" name="addiagnosis3_BlockDetail" pattern="^[0-9]$" title="Enter a single digit (0-9)" value="{{ old('addiagnosis3_BlockDetail') }}" maxlength="1">
                                 </td>
                             </tr>
                             <tr>

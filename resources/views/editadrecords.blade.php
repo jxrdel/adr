@@ -174,26 +174,26 @@
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 1 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis1_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis1_Block}}" maxlength="3">
+                                <td><input size="6" type="text" name="adDiagnosis1_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter followed by 2 numbers" value="{{$record->adDiagnosis1_Block}}" maxlength="3">
                                     . <input size="6" type="text" name="adDiagnosis1_BlockDetail" pattern="^[0-9]$" title="Please enter 1 digit" value="{{$record->adDiagnosis1_BlockDetail}}" maxlength="1">
                                 </td>
                                 
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 2 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis2_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis2_Block}}" maxlength="3">
+                                <td><input size="6" type="text" name="adDiagnosis2_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter followed by 2 numbers" value="{{$record->adDiagnosis2_Block}}" maxlength="3">
                                     . <input size="6" type="text" name="adDiagnosis2_BlockDetail" value="{{$record->adDiagnosis2_BlockDetail}}" maxlength="1">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 3 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis3_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter follower by 2 numbers" value="{{$record->adDiagnosis3_Block}}" maxlength="3"> . 
-                                    <input size="6" type="text" name="adDiagnosis3_BlockDetail" value="{{$record->addiagnosis3_BlockDetail}}" maxlength="1">
+                                <td><input size="6" type="text" name="adDiagnosis3_Block" pattern="^[A-Za-z][0-9]{2}$" title="Please enter 1 letter followed by 2 numbers" value="{{$record->adDiagnosis3_Block}}" maxlength="3"> . 
+                                    <input size="6" type="text" name="addiagnosis3_BlockDetail" value="{{$record->addiagnosis3_BlockDetail}}" maxlength="1">
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="title">Diagnosis 4 &nbsp;</label></th>
-                                <td><input size="6" type="text" name="adDiagnosis4_Block" pattern="^[A-Za-z][0-9]{3}$" title="Please enter 1 letter follower by 3 numbers" value="{{$record->adDiagnosis4_Block}}" maxlength="4"> . 
+                                <td><input size="6" type="text" name="adDiagnosis4_Block" pattern="^[A-Za-z][0-9]{0,3}" title="Please enter 1 letter followed by max 3 numbers" value="{{$record->adDiagnosis4_Block}}" maxlength="4"> . 
                                     <input size="6" type="text" name="adDiagnosis4_BlockDetail" value="{{$record->adDiagnosis4_BlockDetail}}" maxlength="1">
                                 </td>
                             </tr>

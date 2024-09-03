@@ -350,6 +350,8 @@ class AdPatientRecordBatchController extends Controller
             'adECode_BlockDetail' => $request->input('adECode_BlockDetail'),
             'adDischargeStatusID' => $request->input('adDischargeStatusID'),
             'adDischargeTypeID' => $request->input('adDischargeTypeID'),
+            'adCauseOfDeath_Block' => $request->input('adCauseOfDeath_Block'),
+            'adCauseOfDeath_BlockDetail' => $request->input('adCauseOfDeath_BlockDetail'),
             'adCreatedDate' => $now,
             'adLastUpdatedDate' => $now,
             'adExceptionalCase' => $adExceptionalCase,
